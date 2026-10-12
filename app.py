@@ -1,0 +1,258 @@
+"""
+Full-Stack Flask Backend Application for Dilshaj Ashrafi's Portfolio
+Serves RESTful API endpoints, handles SQLite persistence, and serves static frontend assets.
+"""
+
+import os
+import re
+from datetime import datetime
+from flask import Flask, request, jsonify, send_from_directory, make_response
+import database
+
+# Initialize Flask App
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__, static_folder=BASE_DIR, static_url_path='')
+
+# Admin Passcode (can be overridden via environment variable)
+ADMIN_PASSCODE = os.environ.get('ADMIN_PASSCODE', 'dilshaj2026')
+
+# Initialize SQLite database on startup
+database.init_db()
+
+# --- CORS & Security Headers Middleware ---
+@app.after_request
+def add_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, DELETE, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, X-Admin-Token'
+    return response
+
+# --- Static File Serving ---
+@app.route('/')
+def serve_index():
+    """Serves the main frontend portfolio single-page application."""
+    database.log_event("page_view", f"IP: {request.remote_addr}")
+    return send_from_directory(BASE_DIR, 'index.html')
+
+@app.route('/<path:filename>')
+def serve_static_file(filename):
+    """Serves CSS, JS, Assets, and other static assets."""
+    target_path = os.path.join(BASE_DIR, filename)
+    if os.path.isfile(target_path):
+        return send_from_directory(BASE_DIR, filename)
+    return jsonify({"error": "File not found"}), 404
+
+# --- Public REST API Endpoints ---
+
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """System health check endpoint."""
+    return jsonify({
+        "status": "healthy",
+        "service": "Dilshaj Ashrafi Portfolio Engine",
+        "backend": "Flask 3.1.3",
+        "database": "SQLite 3",
+        "server_time": datetime.now().isoformat(),
+        "endpoints": [
+            "/api/health",
+            "/api/stats",
+            "/api/contact",
+            "/api/projects/likes",
+            "/api/projects/like",
+            "/api/subscribe",
+            "/api/terminal",
+            "/api/admin/overview"
+        ]
+    }), 200
+
+@app.route('/api/stats', methods=['GET'])
+def get_public_stats():
+    """Returns live aggregated statistics."""
+    summary = database.get_dashboard_summary()
+    return jsonify({
+        "success": True,
+        "data": summary
+    }), 200
+
+@app.route('/api/contact', methods=['POST'])
+def submit_contact_form():
+    """
+    Handles contact form submissions from the frontend.
+    Validates input, writes to SQLite, and returns success response.
+    """
+    data = request.get_json(silent=True) or request.form.to_dict()
+    
+    if not data:
+        return jsonify({"success": False, "error": "Invalid request payload."}), 400
+
+    name = data.get('name', '').strip()
+    email = data.get('email', '').strip()
+    subject = data.get('subject', 'General Inquiry').strip()
+    message = data.get('message', '').strip()
+
+    # Validation
+    if not name or len(name) < 2:
+        return jsonify({"success": False, "error": "Please provide a valid name."}), 400
+
+    if not email or not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        return jsonify({"success": False, "error": "Please provide a valid email address."}), 400
+
+    if not message or len(message) < 5:
+        return jsonify({"success": False, "error": "Message must be at least 5 characters."}), 400
+
+    # Save to SQLite
+    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    msg_id = database.save_message(name, email, subject, message, ip)
+
+    return jsonify({
+        "success": True,
+        "message": f"Thank you, {name}! Your message has been saved to the database. Dilshaj will get back to you shortly.",
+        "message_id": msg_id,
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }), 201
+
+@app.route('/api/projects/likes', methods=['GET'])
+def get_project_likes():
+    """Retrieves all project likes and views counts."""
+    stats = database.get_all_project_stats()
+    return jsonify({
+        "success": True,
+        "projects": stats
+    }), 200
+
+@app.route('/api/projects/like', methods=['POST'])
+def like_project():
+    """Increments like count for a project."""
+    data = request.get_json(silent=True) or {}
+    project_id = data.get('projectId', '').strip()
+
+    if not project_id:
+        return jsonify({"success": False, "error": "Project ID is required."}), 400
+
+    new_count = database.increment_project_like(project_id)
+    return jsonify({
+        "success": True,
+        "project_id": project_id,
+        "likes": new_count
+    }), 200
+
+@app.route('/api/subscribe', methods=['POST'])
+def subscribe_newsletter():
+    """Subscribes an email to updates."""
+    data = request.get_json(silent=True) or {}
+    email = data.get('email', '').strip()
+
+    if not email or not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        return jsonify({"success": False, "error": "Valid email address required."}), 400
+
+    success, msg = database.add_subscriber(email)
+    status_code = 201 if success else 400
+    return jsonify({
+        "success": success,
+        "message": msg
+    }), status_code
+
+@app.route('/api/terminal', methods=['POST'])
+def process_terminal_command():
+    """Processes interactive CLI terminal queries via the backend."""
+    data = request.get_json(silent=True) or {}
+    command = data.get('command', '').strip().lower()
+
+    if not command:
+        return jsonify({"output": ""}), 200
+
+    database.log_event("terminal_cmd", command)
+
+    # Dynamic Backend Commands
+    if command == 'stats':
+        summary = database.get_dashboard_summary()
+        output = f"""[Live Backend Metrics (SQLite Database)]
+• Total Page Views:     {summary['total_page_views']}
+• Project Likes:        {summary['total_project_likes']}
+• Contact Messages:     {summary['total_messages']} (Unread: {summary['unread_messages']})
+• Subscribers:          {summary['total_subscribers']}
+• Backend Status:       Flask 3.1.3 Active & Healthy"""
+        return jsonify({"output": output, "status": "info"}), 200
+
+    elif command in ('db', 'database'):
+        output = f"""[SQLite Database Status]
+• Location: {database.DB_PATH}
+• Tables:   messages, project_likes, subscribers, analytics
+• Engine:   SQLite 3 with ACID compliance"""
+        return jsonify({"output": output, "status": "accent"}), 200
+
+    elif command == 'admin':
+        output = "To access the Admin Portal, use the 'Admin Portal' button in the footer or enter your passcode."
+        return jsonify({"output": output, "action": "open_admin", "status": "accent"}), 200
+
+    return jsonify({"fallback": True}), 200
+
+# --- Admin API Endpoints (Protected) ---
+
+def verify_admin_auth():
+    """Validates the admin passcode header or query parameter."""
+    token = request.headers.get('X-Admin-Token') or request.args.get('token')
+    return token == ADMIN_PASSCODE
+
+@app.route('/api/admin/auth', methods=['POST'])
+def admin_login():
+    """Verifies admin passcode."""
+    data = request.get_json(silent=True) or {}
+    passcode = data.get('passcode', '')
+
+    if passcode == ADMIN_PASSCODE:
+        return jsonify({
+            "success": True,
+            "message": "Authentication successful! Welcome, Dilshaj.",
+            "token": ADMIN_PASSCODE
+        }), 200
+    return jsonify({
+        "success": False,
+        "error": "Invalid passcode. Access denied."
+    }), 401
+
+@app.route('/api/admin/overview', methods=['GET'])
+def admin_overview():
+    """Returns dashboard metrics and message list for authenticated admin."""
+    if not verify_admin_auth():
+        return jsonify({"error": "Unauthorized"}), 401
+
+    summary = database.get_dashboard_summary()
+    messages = database.get_all_messages()
+    project_stats = database.get_all_project_stats()
+
+    return jsonify({
+        "success": True,
+        "summary": summary,
+        "messages": messages,
+        "projects": project_stats
+    }), 200
+
+@app.route('/api/admin/messages/<int:msg_id>/read', methods=['POST'])
+def admin_mark_read(msg_id):
+    """Marks a message as read in SQLite."""
+    if not verify_admin_auth():
+        return jsonify({"error": "Unauthorized"}), 401
+
+    database.mark_message_as_read(msg_id)
+    return jsonify({"success": True, "message_id": msg_id}), 200
+
+@app.route('/api/admin/messages/<int:msg_id>', methods=['DELETE'])
+def admin_delete_msg(msg_id):
+    """Deletes a message from SQLite."""
+    if not verify_admin_auth():
+        return jsonify({"error": "Unauthorized"}), 401
+
+    database.delete_message(msg_id)
+    return jsonify({"success": True, "deleted_id": msg_id}), 200
+
+# --- Main Entry Point ---
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    print("\n========================================================")
+    print(">> Dilshaj Ashrafi Full-Stack Server Running!")
+    print(f">> Local URL:  http://localhost:{port}")
+    print(f">> Database:   {database.DB_PATH}")
+    print(f">> Admin Code: {ADMIN_PASSCODE}")
+    print("========================================================\n")
+    app.run(host='0.0.0.0', port=port, debug=False)
