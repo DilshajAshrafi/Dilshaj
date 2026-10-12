@@ -8,13 +8,11 @@ import re
 from datetime import datetime
 from flask import Flask, request, jsonify, send_from_directory, make_response
 import database
+import mailer
 
 # Initialize Flask App
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__, static_folder=BASE_DIR, static_url_path='')
-
-# Admin Passcode (can be overridden via environment variable)
-ADMIN_PASSCODE = os.environ.get('ADMIN_PASSCODE', 'dilshaj2026')
 
 # Initialize SQLite database on startup
 database.init_db()
@@ -104,10 +102,16 @@ def submit_contact_form():
     ip = request.headers.get('X-Forwarded-For', request.remote_addr)
     msg_id = database.save_message(name, email, subject, message, ip)
 
+    # Dispatch email notification to Dilshaj's Gmail
+    email_sent, email_status, gmail_compose_url = mailer.send_contact_email(name, email, subject, message)
+
     return jsonify({
         "success": True,
-        "message": f"Thank you, {name}! Your message has been saved to the database. Dilshaj will get back to you shortly.",
+        "message": f"Thank you, {name}! Your message has been saved to the database.",
         "message_id": msg_id,
+        "email_sent": email_sent,
+        "email_status": email_status,
+        "gmail_compose_url": gmail_compose_url,
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }), 201
 
@@ -181,70 +185,7 @@ def process_terminal_command():
 • Engine:   SQLite 3 with ACID compliance"""
         return jsonify({"output": output, "status": "accent"}), 200
 
-    elif command == 'admin':
-        output = "To access the Admin Portal, use the 'Admin Portal' button in the footer or enter your passcode."
-        return jsonify({"output": output, "action": "open_admin", "status": "accent"}), 200
-
     return jsonify({"fallback": True}), 200
-
-# --- Admin API Endpoints (Protected) ---
-
-def verify_admin_auth():
-    """Validates the admin passcode header or query parameter."""
-    token = request.headers.get('X-Admin-Token') or request.args.get('token')
-    return token == ADMIN_PASSCODE
-
-@app.route('/api/admin/auth', methods=['POST'])
-def admin_login():
-    """Verifies admin passcode."""
-    data = request.get_json(silent=True) or {}
-    passcode = data.get('passcode', '')
-
-    if passcode == ADMIN_PASSCODE:
-        return jsonify({
-            "success": True,
-            "message": "Authentication successful! Welcome, Dilshaj.",
-            "token": ADMIN_PASSCODE
-        }), 200
-    return jsonify({
-        "success": False,
-        "error": "Invalid passcode. Access denied."
-    }), 401
-
-@app.route('/api/admin/overview', methods=['GET'])
-def admin_overview():
-    """Returns dashboard metrics and message list for authenticated admin."""
-    if not verify_admin_auth():
-        return jsonify({"error": "Unauthorized"}), 401
-
-    summary = database.get_dashboard_summary()
-    messages = database.get_all_messages()
-    project_stats = database.get_all_project_stats()
-
-    return jsonify({
-        "success": True,
-        "summary": summary,
-        "messages": messages,
-        "projects": project_stats
-    }), 200
-
-@app.route('/api/admin/messages/<int:msg_id>/read', methods=['POST'])
-def admin_mark_read(msg_id):
-    """Marks a message as read in SQLite."""
-    if not verify_admin_auth():
-        return jsonify({"error": "Unauthorized"}), 401
-
-    database.mark_message_as_read(msg_id)
-    return jsonify({"success": True, "message_id": msg_id}), 200
-
-@app.route('/api/admin/messages/<int:msg_id>', methods=['DELETE'])
-def admin_delete_msg(msg_id):
-    """Deletes a message from SQLite."""
-    if not verify_admin_auth():
-        return jsonify({"error": "Unauthorized"}), 401
-
-    database.delete_message(msg_id)
-    return jsonify({"success": True, "deleted_id": msg_id}), 200
 
 # --- Main Entry Point ---
 if __name__ == '__main__':
@@ -253,6 +194,6 @@ if __name__ == '__main__':
     print(">> Dilshaj Ashrafi Full-Stack Server Running!")
     print(f">> Local URL:  http://localhost:{port}")
     print(f">> Database:   {database.DB_PATH}")
-    print(f">> Admin Code: {ADMIN_PASSCODE}")
+    print(f">> Notification Email: dilshajashrafi@gmail.com")
     print("========================================================\n")
     app.run(host='0.0.0.0', port=port, debug=False)

@@ -714,8 +714,8 @@ a {
 }
 
 .floating-badge.badge-2 {
-  bottom: 18%;
-  right: -10%;
+  bottom: 20%;
+  right: -18%;
   animation-delay: 2s;
 }
 
@@ -1852,128 +1852,7 @@ a {
   flex: 1;
 }
 
-/* Admin Dashboard Modal Styles */
-.admin-modal-window {
-  max-width: 780px !important;
-}
-
-.admin-metrics-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.admin-stat-box {
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 1.1rem;
-  text-align: center;
-}
-
-.admin-stat-num {
-  font-size: 1.9rem;
-  font-weight: 900;
-  color: var(--accent-cyan);
-  display: block;
-}
-
-.admin-stat-label {
-  font-size: 0.76rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.admin-messages-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-height: 420px;
-  overflow-y: auto;
-  padding-right: 0.5rem;
-  margin-top: 0.75rem;
-}
-
-.admin-msg-card {
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.admin-msg-card.unread {
-  border-left: 4px solid var(--accent-indigo);
-  background: rgba(99, 102, 241, 0.05);
-}
-
-.admin-msg-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.admin-msg-sender {
-  font-weight: 700;
-  color: var(--text-primary);
-  font-size: 0.95rem;
-}
-
-.admin-msg-email {
-  color: var(--accent-cyan);
-  font-size: 0.85rem;
-}
-
-.admin-msg-time {
-  color: var(--text-muted);
-  font-size: 0.78rem;
-}
-
-.admin-msg-body {
-  color: var(--text-secondary);
-  font-size: 0.92rem;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  background: var(--bg-secondary);
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
-}
-
-.admin-msg-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.4rem;
-}
-
-.admin-portal-link {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: 0.82rem;
-  cursor: pointer;
-  transition: color var(--transition-fast);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.admin-portal-link:hover {
-  color: var(--accent-indigo);
-}
-
 @media (max-width: 600px) {
-  .admin-metrics-row {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .newsletter-strip {
     flex-direction: column;
     align-items: stretch;

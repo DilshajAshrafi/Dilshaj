@@ -52,7 +52,6 @@
           <li><a href="#terminal" class="nav-link">CLI Terminal</a></li>
           <li><a href="#journey" class="nav-link">Journey</a></li>
           <li><a href="#contact" class="nav-link">Contact</a></li>
-          <li><button class="admin-portal-link open-admin-trigger" title="Admin Message Portal" style="font-weight:600; padding:0.25rem 0.5rem;">🔐 Admin</button></li>
           <li><a href="#contact" class="btn btn-primary btn-sm">Hire Me</a></li>
         </ul>
       </nav>
@@ -592,9 +591,12 @@
               </div>
 
               <div class="project-actions">
-                <button class="btn btn-primary btn-sm open-modal-btn" data-project="kisaan">
-                  <span>Explore Case Study</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                <a href="https://kissansathiindia.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" title="Open Live Kisaan Sathi Website">
+                  <span>Live Demo</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+                <button class="btn btn-secondary btn-sm open-modal-btn" data-project="kisaan">
+                  <span>Case Study</span>
                 </button>
                 <button class="project-like-btn" data-project="kisaan" title="Like this project">
                   <span class="heart-icon">❤️</span>
@@ -755,7 +757,6 @@
             <button class="terminal-chip-btn" data-cmd="kisaan">kisaan</button>
             <button class="terminal-chip-btn" data-cmd="stats">stats</button>
             <button class="terminal-chip-btn" data-cmd="db">db</button>
-            <button class="terminal-chip-btn" data-cmd="admin">admin</button>
             <button class="terminal-chip-btn" data-cmd="contact">contact</button>
             <button class="terminal-chip-btn" data-cmd="clear">clear</button>
           </div>
@@ -775,7 +776,7 @@ Type 'help' or click any button above to explore my work, backend database, and 
           <!-- Terminal Input Row -->
           <div style="padding: 0.85rem 1.25rem; background: #161b22; border-top: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 0.6rem;">
             <span style="color: #58a6ff; font-family: var(--font-mono); font-weight: 700; font-size: 0.9rem;">visitor@dilshaj:~$</span>
-            <input type="text" id="terminal-input" class="terminal-input" placeholder="Type 'help', 'stats', 'db', 'admin', 'contact'..." autocomplete="off" spellcheck="false">
+            <input type="text" id="terminal-input" class="terminal-input" placeholder="Type 'help', 'stats', 'db', 'contact'..." autocomplete="off" spellcheck="false">
           </div>
         </div>
       </div>
@@ -848,7 +849,7 @@ Type 'help' or click any button above to explore my work, backend database, and 
           <div class="section-tag">Let's Connect</div>
           <h2 class="section-title">Get in Touch with <span class="gradient-text">Dilshaj</span></h2>
           <p class="section-desc">
-            Have an exciting opportunity, project idea, or want to discuss AI engineering? Send me a message or connect directly.
+            Have an exciting opportunity, project idea, or want to discuss AI engineering? Send me a message below — it forwards straight to my Gmail.
           </p>
         </div>
 
@@ -861,7 +862,7 @@ Type 'help' or click any button above to explore my work, backend database, and 
                 <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
               </div>
               <div class="contact-card-details">
-                <div class="contact-card-label">Direct Email</div>
+                <div class="contact-card-label">Direct Gmail</div>
                 <div class="contact-card-value">dilshajashrafi@gmail.com</div>
               </div>
               <button class="copy-btn" data-copy="dilshajashrafi@gmail.com" title="Copy Email">
@@ -912,11 +913,11 @@ Type 'help' or click any button above to explore my work, backend database, and 
             </div>
           </div>
 
-          <!-- Contact Form with Backend SQLite Connection -->
+          <!-- Contact Form with Automatic Gmail Notification -->
           <div class="contact-form-card">
             <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem;">Send a Message</h3>
             <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem;">
-              Directly records to the backend SQLite database and alerts Dilshaj in real-time.
+              Fill in the form to deliver your message straight to Dilshaj's Gmail inbox.
             </p>
 
             <form id="contact-form" class="contact-form">
@@ -942,7 +943,7 @@ Type 'help' or click any button above to explore my work, backend database, and 
               </div>
 
               <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.9rem;">
-                <span>Send Message</span>
+                <span>Send Directly to Gmail</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
               </button>
             </form>
@@ -1000,7 +1001,7 @@ Type 'help' or click any button above to explore my work, backend database, and 
           &copy; <span id="current-year">2026</span> <strong>Dilshaj Ashrafi</strong>. All rights reserved.
         </div>
         <div>
-          <button class="admin-portal-link open-admin-trigger" title="Admin Message Portal">🔐 Admin Message Portal</button>
+          Crafted with passion, performance & clean code.
         </div>
         <button id="back-to-top" class="back-to-top-btn">
           <span>Back to Top</span>
@@ -1017,63 +1018,6 @@ Type 'help' or click any button above to explore my work, backend database, and 
       <h3 id="modal-title" style="font-size: 1.45rem; font-weight: 800; margin-bottom: 1.25rem; padding-right: 2rem;">Project Details</h3>
       <div id="modal-body">
         <!-- Injected via JavaScript -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Admin Dashboard Modal Dialog -->
-  <div class="modal-overlay" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
-    <div class="modal-window admin-modal-window">
-      <button class="modal-close-btn" id="admin-modal-close" aria-label="Close Admin Modal">&times;</button>
-      
-      <!-- Admin Authentication View -->
-      <div id="admin-auth-view">
-        <h3 id="admin-modal-title" style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem;">🔐 Admin Message Portal</h3>
-        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">
-          Enter passcode to view received contact messages and database analytics.
-        </p>
-        <form id="admin-auth-form" style="display: flex; gap: 0.75rem;">
-          <input type="password" id="admin-passcode-input" class="form-input" placeholder="Passcode (default: dilshaj2026)" required style="flex:1;">
-          <button type="submit" class="btn btn-primary btn-sm">Unlock</button>
-        </form>
-        <div id="admin-auth-error" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.6rem; display: none;"></div>
-      </div>
-
-      <!-- Admin Dashboard View (Unlocked) -->
-      <div id="admin-dashboard-view" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-          <div>
-            <h3 style="font-size: 1.4rem; font-weight: 800;">📊 Database Message Center</h3>
-            <p style="color: var(--text-secondary); font-size: 0.85rem;">Live records from <code>data/portfolio.db</code></p>
-          </div>
-          <button id="admin-refresh-btn" class="btn btn-secondary btn-sm">🔄 Refresh</button>
-        </div>
-
-        <!-- Quick Metrics Grid -->
-        <div class="admin-metrics-row">
-          <div class="admin-stat-box">
-            <span class="admin-stat-num" id="admin-stat-msgs">0</span>
-            <span class="admin-stat-label">Total Messages</span>
-          </div>
-          <div class="admin-stat-box">
-            <span class="admin-stat-num" id="admin-stat-unread">0</span>
-            <span class="admin-stat-label">Unread</span>
-          </div>
-          <div class="admin-stat-box">
-            <span class="admin-stat-num" id="admin-stat-likes">0</span>
-            <span class="admin-stat-label">Project Likes</span>
-          </div>
-          <div class="admin-stat-box">
-            <span class="admin-stat-num" id="admin-stat-subs">0</span>
-            <span class="admin-stat-label">Subscribers</span>
-          </div>
-        </div>
-
-        <!-- Messages List Container -->
-        <h4 style="margin: 1.5rem 0 0.75rem 0; font-size: 1.05rem;">Inbox Messages:</h4>
-        <div id="admin-messages-list" class="admin-messages-list">
-          <!-- Messages rendered by JS -->
-        </div>
       </div>
     </div>
   </div>

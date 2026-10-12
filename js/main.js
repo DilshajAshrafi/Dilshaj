@@ -1,12 +1,11 @@
 /**
  * Dilshaj Ashrafi — Full-Stack Interactive Frontend & API Client Engine
- * Connects with Flask Backend & SQLite Database, handles animations, CLI terminal, and Admin Portal
+ * Connects with Flask Backend & SQLite Database, handles animations, CLI terminal, and Gmail dispatch
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // Global backend connection state
   let isBackendLive = false;
-  let adminAuthToken = sessionStorage.getItem('da_admin_token') || '';
 
   // --- 1. Background Interactive Constellation Canvas ---
   const canvas = document.getElementById('bg-canvas');
@@ -267,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
       toast.classList.remove('show');
-    }, 3600);
+    }, 4000);
   }
 
   // --- 8. Copy to Clipboard ---
@@ -308,7 +307,6 @@ document.addEventListener('DOMContentLoaded', () => {
           backendPill.style.borderColor = 'rgba(16, 185, 129, 0.4)';
           backendPill.style.background = 'rgba(16, 185, 129, 0.12)';
         }
-        // Load live project likes
         loadProjectLikes();
       }
     } catch (err) {
@@ -347,7 +345,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const projId = btn.getAttribute('data-project');
       const counterEl = document.getElementById(`likes-${projId}`);
 
-      // UI pop animation
       btn.classList.add('liked');
       const heart = btn.querySelector('.heart-icon');
       if (heart) {
@@ -365,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (res.ok) {
             const data = await res.json();
             if (counterEl) counterEl.textContent = data.likes;
-            showToast(`❤️ Thanks for liking ${projId}! Persisted in database.`);
+            showToast(`❤️ Liked! Persisted in database.`);
             return;
           }
         } catch (err) {
@@ -373,7 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Offline fallback increment
       if (counterEl) {
         const curr = parseInt(counterEl.textContent, 10) || 0;
         counterEl.textContent = curr + 1;
@@ -382,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- 11. Full-Stack Contact Form (Persists to SQLite) ---
+  // --- 11. Full-Stack Contact Form (Dispatches to Gmail & SQLite) ---
   const contactForm = document.getElementById('contact-form');
   const submitBtn = contactForm ? contactForm.querySelector('button[type="submit"]') : null;
 
@@ -402,8 +398,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Loading state
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span>Saving to Database...</span>`;
+        submitBtn.innerHTML = `<span>Delivering to Gmail...</span>`;
       }
+
+      // Default Gmail compose fallback URL
+      let gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=dilshajashrafi@gmail.com&su=${encodeURIComponent('Portfolio Message from ' + name + ': ' + (subject || 'Inquiry'))}&body=${encodeURIComponent('Hello Dilshaj,\n\nName: ' + name + '\nEmail: ' + email + '\n\n' + message)}`;
 
       if (isBackendLive) {
         try {
@@ -416,29 +415,32 @@ document.addEventListener('DOMContentLoaded', () => {
           const resData = await response.json();
 
           if (response.ok && resData.success) {
-            showToast(`✓ Message #${resData.message_id} saved to SQLite database! Dilshaj will be in touch.`);
+            if (resData.gmail_compose_url) {
+              gmailComposeUrl = resData.gmail_compose_url;
+            }
+
+            if (resData.email_sent) {
+              showToast(`🎉 Message delivered directly to Dilshaj's Gmail!`);
+            } else {
+              showToast(`✓ Message recorded! Opening Gmail to dispatch...`);
+              window.open(gmailComposeUrl, '_blank');
+            }
             contactForm.reset();
             return;
-          } else {
-            showToast(`⚠️ ${resData.error || 'Failed to submit'}`);
           }
         } catch (err) {
-          console.error('Backend submission failed, falling back to mailto', err);
+          console.error('Backend submission failed, opening Gmail directly', err);
         } finally {
           if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = `<span>Send Message</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
+            submitBtn.innerHTML = `<span>Send Directly to Gmail</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
           }
         }
       }
 
-      // Direct mailto fallback if backend is offline
-      const mailtoLink = `mailto:dilshajashrafi@gmail.com?subject=${encodeURIComponent(subject || 'Message from ' + name)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`;
-      showToast('Opening your email client to send message...');
-      setTimeout(() => {
-        window.location.href = mailtoLink;
-      }, 700);
-
+      // If backend offline, open direct Gmail compose tab
+      showToast('Opening Gmail directly to send message...');
+      window.open(gmailComposeUrl, '_blank');
       contactForm.reset();
     });
   }
@@ -488,7 +490,6 @@ document.addEventListener('DOMContentLoaded', () => {
   • contact    - Get email, phone & social links
   • stats      - Query live database metrics
   • db         - Check SQLite database status
-  • admin      - Open the Admin Message Portal
   • clear      - Clear terminal window
   • date       - Show current system date & time
   • whoami     - Display visitor identity profile`,
@@ -516,7 +517,8 @@ Highlights:
 (Type 'kisaan' to learn more about the flagship project)`,
 
     kisaan: () => `[Project Spotlight: Kisaan Sathi]
-Status: Production Ready • High Community Impact
+Status: Live in Production • High Community Impact
+Website: https://kissansathiindia.vercel.app/
 Summary:
 - Comprehensive agricultural advisory platform built for farmers.
 - Features: AI-guided crop disease diagnosis, soil care, irrigation support, & government scheme navigator.
@@ -524,10 +526,12 @@ Summary:
 - Impact: Democratizing agronomist-grade guidance directly into the hands of farmers.`,
 
     contact: () => `Direct Contact Information:
-• Email:    dilshajashrafi@gmail.com
-• Phone:    +91 8292992959
-• Location: India
-• Status:   Available for full-time roles & innovative AI collaborations`,
+• Email:     dilshajashrafi@gmail.com
+• Phone:     +91 8292992959
+• GitHub:    https://github.com/DilshajAshrafi
+• Instagram: https://www.instagram.com/dilshaj_ashrafi2
+• Location:  India
+• Status:    Available for full-time roles & innovative AI collaborations`,
 
     quote: () => `"Any sufficiently advanced technology is indistinguishable from magic. Let's build the magic together." — Arthur C. Clarke`,
 
@@ -568,12 +572,6 @@ Summary:
       return;
     }
 
-    if (cmd === 'admin') {
-      openAdminModal();
-      appendTerminalLine(rawCmd, 'Opening Admin Message Portal modal window...');
-      return;
-    }
-
     // Try backend evaluation if live
     if (isBackendLive) {
       try {
@@ -584,9 +582,6 @@ Summary:
         });
         if (res.ok) {
           const data = await res.json();
-          if (data.action === 'open_admin') {
-            openAdminModal();
-          }
           if (data.output) {
             appendTerminalLine(rawCmd, data.output);
             return;
@@ -653,6 +648,12 @@ Summary:
               <span class="tech-chip">AI API Services</span>
               <span class="tech-chip">SQLite 3</span>
             </div>
+          </div>
+          <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
+            <a href="https://kissansathiindia.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+              <span>Launch Live Website</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
           </div>
         </div>
       `
@@ -747,177 +748,7 @@ Summary:
     });
   }
 
-  // --- 15. Admin Portal Modal System ---
-  const adminModal = document.getElementById('admin-modal');
-  const adminCloseBtn = document.getElementById('admin-modal-close');
-  const adminAuthView = document.getElementById('admin-auth-view');
-  const adminDashboardView = document.getElementById('admin-dashboard-view');
-  const adminAuthForm = document.getElementById('admin-auth-form');
-  const adminAuthError = document.getElementById('admin-auth-error');
-  const adminRefreshBtn = document.getElementById('admin-refresh-btn');
-  const openAdminBtns = document.querySelectorAll('.open-admin-trigger');
-
-  function openAdminModal() {
-    if (!adminModal) return;
-    adminModal.classList.add('active');
-    if (adminAuthToken) {
-      loadAdminDashboard();
-    } else {
-      if (adminAuthView) adminAuthView.style.display = 'block';
-      if (adminDashboardView) adminDashboardView.style.display = 'none';
-    }
-  }
-
-  openAdminBtns.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      openAdminModal();
-    });
-  });
-
-  if (adminCloseBtn && adminModal) {
-    adminCloseBtn.addEventListener('click', () => {
-      adminModal.classList.remove('active');
-    });
-
-    adminModal.addEventListener('click', (e) => {
-      if (e.target === adminModal) {
-        adminModal.classList.remove('active');
-      }
-    });
-  }
-
-  if (adminAuthForm) {
-    adminAuthForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const passcode = document.getElementById('admin-passcode-input').value.trim();
-
-      try {
-        const res = await fetch('/api/admin/auth', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ passcode })
-        });
-        const data = await res.json();
-        if (res.ok && data.success) {
-          adminAuthToken = data.token;
-          sessionStorage.setItem('da_admin_token', adminAuthToken);
-          if (adminAuthError) adminAuthError.style.display = 'none';
-          loadAdminDashboard();
-        } else {
-          if (adminAuthError) {
-            adminAuthError.textContent = data.error || 'Invalid passcode.';
-            adminAuthError.style.display = 'block';
-          }
-        }
-      } catch (err) {
-        if (adminAuthError) {
-          adminAuthError.textContent = 'Server unreachable. Run "python app.py" to start backend.';
-          adminAuthError.style.display = 'block';
-        }
-      }
-    });
-  }
-
-  async function loadAdminDashboard() {
-    if (!adminAuthToken) return;
-
-    try {
-      const res = await fetch('/api/admin/overview', {
-        headers: { 'X-Admin-Token': adminAuthToken }
-      });
-
-      if (!res.ok) {
-        adminAuthToken = '';
-        sessionStorage.removeItem('da_admin_token');
-        if (adminAuthView) adminAuthView.style.display = 'block';
-        if (adminDashboardView) adminDashboardView.style.display = 'none';
-        return;
-      }
-
-      const data = await res.json();
-      if (adminAuthView) adminAuthView.style.display = 'none';
-      if (adminDashboardView) adminDashboardView.style.display = 'block';
-
-      // Update stat counters
-      const summary = data.summary;
-      document.getElementById('admin-stat-msgs').textContent = summary.total_messages;
-      document.getElementById('admin-stat-unread').textContent = summary.unread_messages;
-      document.getElementById('admin-stat-likes').textContent = summary.total_project_likes;
-      document.getElementById('admin-stat-subs').textContent = summary.total_subscribers;
-
-      // Render messages
-      const msgsList = document.getElementById('admin-messages-list');
-      if (msgsList) {
-        if (!data.messages || data.messages.length === 0) {
-          msgsList.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted);">No messages in database yet. Test the contact form below!</div>`;
-          return;
-        }
-
-        msgsList.innerHTML = data.messages.map((m) => `
-          <div class="admin-msg-card ${m.is_read ? '' : 'unread'}" id="msg-card-${m.id}">
-            <div class="admin-msg-top">
-              <div>
-                <span class="admin-msg-sender">${escapeHtml(m.name)}</span> &bull; 
-                <a href="mailto:${escapeHtml(m.email)}" class="admin-msg-email">${escapeHtml(m.email)}</a>
-              </div>
-              <span class="admin-msg-time">${escapeHtml(m.created_at)}</span>
-            </div>
-            <div style="font-weight:600; font-size:0.92rem; color:var(--text-primary);">${escapeHtml(m.subject || 'No Subject')}</div>
-            <div class="admin-msg-body">${escapeHtml(m.message)}</div>
-            <div class="admin-msg-actions">
-              ${!m.is_read ? `<button class="btn btn-secondary btn-sm" onclick="markMessageRead(${m.id})">Mark Read</button>` : ''}
-              <a href="mailto:${escapeHtml(m.email)}?subject=Re: ${encodeURIComponent(m.subject || '')}" class="btn btn-primary btn-sm">Reply Email</a>
-              <button class="btn btn-outline btn-sm" onclick="deleteMessage(${m.id})" style="border-color:#ff5f56; color:#ff5f56;">Delete</button>
-            </div>
-          </div>
-        `).join('');
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  if (adminRefreshBtn) {
-    adminRefreshBtn.addEventListener('click', loadAdminDashboard);
-  }
-
-  window.markMessageRead = async function(id) {
-    try {
-      const res = await fetch(`/api/admin/messages/${id}/read`, {
-        method: 'POST',
-        headers: { 'X-Admin-Token': adminAuthToken }
-      });
-      if (res.ok) {
-        const card = document.getElementById(`msg-card-${id}`);
-        if (card) card.classList.remove('unread');
-        loadAdminDashboard();
-        showToast('✓ Message marked as read.');
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  window.deleteMessage = async function(id) {
-    if (!confirm('Are you sure you want to delete this message?')) return;
-    try {
-      const res = await fetch(`/api/admin/messages/${id}`, {
-        method: 'DELETE',
-        headers: { 'X-Admin-Token': adminAuthToken }
-      });
-      if (res.ok) {
-        const card = document.getElementById(`msg-card-${id}`);
-        if (card) card.remove();
-        loadAdminDashboard();
-        showToast('✓ Message deleted from database.');
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // --- 16. Back to Top Smooth Scroll ---
+  // --- 15. Back to Top Smooth Scroll ---
   const backToTopBtn = document.getElementById('back-to-top');
   if (backToTopBtn) {
     backToTopBtn.addEventListener('click', () => {
