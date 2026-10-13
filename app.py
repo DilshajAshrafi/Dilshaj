@@ -1,4 +1,4 @@
-"""
+﻿"""
 Full-Stack Flask Backend Application for Dilshaj Ashrafi's Portfolio
 Serves RESTful API endpoints, handles SQLite persistence, and serves static frontend assets.
 """
@@ -194,6 +194,6 @@ if __name__ == '__main__':
     print(">> Dilshaj Ashrafi Full-Stack Server Running!")
     print(f">> Local URL:  http://localhost:{port}")
     print(f">> Database:   {database.DB_PATH}")
-    print(f">> Notification Email: dilshajashrafi@gmail.com")
+    print(f">> Notification Email: dilshajashrafi87@gmail.com")
     print("========================================================\n")
     app.run(host='0.0.0.0', port=port, debug=False)

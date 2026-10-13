@@ -1,6 +1,6 @@
-"""
+﻿"""
 Email Dispatcher Module for Dilshaj Ashrafi's Portfolio
-Delivers contact form submissions directly to dilshajashrafi@gmail.com via SMTP
+Delivers contact form submissions directly to dilshajashrafi87@gmail.com via SMTP
 """
 
 import os
@@ -24,9 +24,9 @@ load_env_file()
 
 SMTP_SERVER = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
 SMTP_PORT = int(os.environ.get('SMTP_PORT', 587))
-SENDER_EMAIL = os.environ.get('SMTP_USER', 'dilshajashrafi@gmail.com')
+SENDER_EMAIL = os.environ.get('SMTP_USER', 'dilshajashrafi87@gmail.com')
 SENDER_PASSWORD = os.environ.get('GMAIL_APP_PASSWORD', '') # 16-character Google App Password
-RECIPIENT_EMAIL = os.environ.get('NOTIFICATION_EMAIL', 'dilshajashrafi@gmail.com')
+RECIPIENT_EMAIL = os.environ.get('NOTIFICATION_EMAIL', 'dilshajashrafi87@gmail.com')
 
 def generate_gmail_compose_url(sender_name, sender_email, subject, message):
     """Generates a direct Gmail Web Compose URL pre-filled with the message."""
@@ -45,7 +45,7 @@ def generate_gmail_compose_url(sender_name, sender_email, subject, message):
 
 def send_contact_email(sender_name, sender_email, subject, message):
     """
-    Sends an email notification to dilshajashrafi@gmail.com.
+    Sends an email notification to dilshajashrafi87@gmail.com.
     Returns (success: bool, status_message: str, gmail_url: str).
     """
     gmail_url = generate_gmail_compose_url(sender_name, sender_email, subject, message)

@@ -1,4 +1,4 @@
-# Dilshaj Ashrafi — Full-Stack Personal Portfolio & System Engine
+﻿# Dilshaj Ashrafi — Full-Stack Personal Portfolio & System Engine
 
 A complete, production-ready Full-Stack website and engineering showcase for **Dilshaj Ashrafi** — Full-Stack AI Engineer, Developer, and Problem Solver.
 
@@ -9,7 +9,7 @@ A complete, production-ready Full-Stack website and engineering showcase for **D
 ### 1. Backend (`app.py`, `database.py`, `mailer.py`)
 - **Server Framework**: Flask 3.1.3 (Python)
 - **Database**: SQLite 3 (`data/portfolio.db`) with persistent tables for messages, project likes, subscribers, and analytics.
-- **Gmail Notifications**: Direct SMTP notification delivery straight to `dilshajashrafi@gmail.com` on form submissions.
+- **Gmail Notifications**: Direct SMTP notification delivery straight to `dilshajashrafi87@gmail.com` on form submissions.
 - **Static File Serving**: Serves the single-page application and all assets on `http://localhost:5000`.
 
 #### REST API Endpoints:
@@ -33,8 +33,8 @@ A complete, production-ready Full-Stack website and engineering showcase for **D
 - **Connected Profiles**:
   - **GitHub**: [github.com/DilshajAshrafi](https://github.com/DilshajAshrafi)
   - **Instagram**: [@dilshaj_ashrafi2](https://www.instagram.com/dilshaj_ashrafi2?xtok=dmtpa2gyejkwY24z)
-  - **Email**: `dilshajashrafi@gmail.com`
-  - **Phone**: `+91 8292992959`
+  - **Email**: `dilshajashrafi87@gmail.com`
+  - **Phone**: `+91 9296806950`
 - **Featured Projects**:
   - **Kisaan Sathi (Smart Farmer AI Platform)**:
     - **Live Production URL**: [https://kissansathiindia.vercel.app/](https://kissansathiindia.vercel.app/)
@@ -46,7 +46,7 @@ A complete, production-ready Full-Stack website and engineering showcase for **D
 - **Interactive Terminal ("Dilshaj CLI")**:
   - In-browser UNIX terminal supporting: `about`, `skills`, `projects`, `kisaan`, `stats`, `db`, `contact`, `clear`.
 - **Direct Gmail Delivery Form**:
-  - Automatically records form submissions into SQLite and delivers them straight to `dilshajashrafi@gmail.com`.
+  - Automatically records form submissions into SQLite and delivers them straight to `dilshajashrafi87@gmail.com`.
 
 ---
 

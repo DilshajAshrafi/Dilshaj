@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // Default Gmail compose fallback URL
-      let gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=dilshajashrafi@gmail.com&su=${encodeURIComponent('Portfolio Message from ' + name + ': ' + (subject || 'Inquiry'))}&body=${encodeURIComponent('Hello Dilshaj,\n\nName: ' + name + '\nEmail: ' + email + '\n\n' + message)}`;
+      let gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=dilshajashrafi87@gmail.com&su=${encodeURIComponent('Portfolio Message from ' + name + ': ' + (subject || 'Inquiry'))}&body=${encodeURIComponent('Hello Dilshaj,\n\nName: ' + name + '\nEmail: ' + email + '\n\n' + message)}`;
 
       if (isBackendLive) {
         try {
@@ -526,8 +526,8 @@ Summary:
 - Impact: Democratizing agronomist-grade guidance directly into the hands of farmers.`,
 
     contact: () => `Direct Contact Information:
-• Email:     dilshajashrafi@gmail.com
-• Phone:     +91 8292992959
+• Email:     dilshajashrafi87@gmail.com
+• Phone:     +91 9296806950
 • GitHub:    https://github.com/DilshajAshrafi
 • Instagram: https://www.instagram.com/dilshaj_ashrafi2
 • Location:  India
@@ -756,6 +756,79 @@ Summary:
     });
   }
 
+  // --- 16. Bulletproof Non-Stop Background Music Engine ---
+  const bgAudio = document.getElementById('bg-audio');
+  if (bgAudio) {
+    bgAudio.volume = 1.0;
+    bgAudio.loop = true;
+    let isPlaying = false;
+
+    // Seamless loop fallback
+    bgAudio.addEventListener('ended', () => {
+      bgAudio.currentTime = 0;
+      bgAudio.play().catch(() => {});
+    });
+
+    // Helper: start audio playback
+    const startAudio = () => {
+      if (isPlaying) return;
+      bgAudio.volume = 1.0;
+      bgAudio.play().then(() => {
+        isPlaying = true;
+        dismissAudioPrompt();
+        cleanupUserEvents();
+      }).catch(err => {
+        console.log('Autoplay deferred by browser:', err);
+        showAudioPrompt();
+      });
+    };
+
+    // Notification prompt if browser blocks initial autoplay
+    let audioPromptEl = null;
+    const showAudioPrompt = () => {
+      if (audioPromptEl || isPlaying) return;
+      audioPromptEl = document.createElement('div');
+      audioPromptEl.id = 'audio-autoplay-prompt';
+      audioPromptEl.innerHTML = `
+        <div style="position: fixed; top: 88px; left: 50%; transform: translateX(-50%); z-index: 9999; background: rgba(9, 13, 22, 0.94); border: 1.5px solid var(--accent-cyan); color: #ffffff; padding: 0.65rem 1.4rem; border-radius: 9999px; box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 20px rgba(6, 182, 212, 0.4); display: flex; align-items: center; gap: 0.75rem; cursor: pointer; animation: floatPrompt 2s infinite ease-in-out;">
+          <span style="font-size: 1.2rem;">🎵</span>
+          <span style="font-size: 0.92rem; font-weight: 600;">Click anywhere on page to play background music</span>
+        </div>
+      `;
+      document.body.appendChild(audioPromptEl);
+      audioPromptEl.addEventListener('click', startAudio);
+    };
+
+    const dismissAudioPrompt = () => {
+      if (audioPromptEl) {
+        audioPromptEl.remove();
+        audioPromptEl = null;
+      }
+    };
+
+    // Valid user interaction events that unblock audio in Chrome/Edge
+    const userGestures = ['pointerdown', 'click', 'keydown', 'touchstart'];
+
+    const onUserGesture = (e) => {
+      startAudio();
+    };
+
+    const cleanupUserEvents = () => {
+      userGestures.forEach(evt => {
+        document.removeEventListener(evt, onUserGesture, true);
+        window.removeEventListener(evt, onUserGesture, true);
+      });
+    };
+
+    userGestures.forEach(evt => {
+      document.addEventListener(evt, onUserGesture, { capture: true, passive: true });
+      window.addEventListener(evt, onUserGesture, { capture: true, passive: true });
+    });
+
+    // Try starting immediately on load
+    startAudio();
+  }
+
   // Update current year dynamically
   const yearEl = document.getElementById('current-year');
   if (yearEl) {
@@ -767,3 +840,4 @@ Summary:
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 });
+
