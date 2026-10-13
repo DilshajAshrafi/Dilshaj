@@ -70,6 +70,7 @@ def init_db():
     # 5. Seed initial projects if not present
     default_projects = [
         ('kisaan', 'Kisaan Sathi — Smart Agro AI', 48, 260),
+        ('mukund_portfolio', 'Mukund Pratap Srivastav Engineering Platform', 42, 235),
         ('ai_assistant', 'Autonomous AI Assistant & Knowledge Engine', 35, 190),
         ('data_science', 'Data Science & Mathematical Modeling Suite', 29, 145),
         ('c_systems', 'High-Performance C Systems Suite', 22, 110)

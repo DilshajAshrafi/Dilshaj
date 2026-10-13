@@ -487,6 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
   • skills     - Core technical capabilities & proficiencies
   • projects   - Showcase of flagship projects & systems
   • kisaan     - Deep dive into Kisaan Sathi Agricultural AI
+  • mukund     - Explore Mukund Pratap Srivastav's Systems Platform
   • contact    - Get email, phone & social links
   • stats      - Query live database metrics
   • db         - Check SQLite database status
@@ -511,10 +512,11 @@ Highlights:
 
     projects: () => `Featured Engineering Projects:
 1. [Kisaan Sathi] - AI Smart Agriculture Advisory & Care Portal
-2. [AI Assistant Engine] - Context-aware Conversational System
-3. [Data Science & Analytics Toolkit] - Statistical models & visual analytics
-4. [C High-Performance Suite] - Algorithmic optimizations & data structures
-(Type 'kisaan' to learn more about the flagship project)`,
+2. [Mukund Pratap Srivastav] - Systems Architect & Engineering Platform (https://mukund-pratap-srivastav.vercel.app/)
+3. [AI Assistant Engine] - Context-aware Conversational System
+4. [Data Science & Analytics Toolkit] - Statistical models & visual analytics
+5. [C High-Performance Suite] - Algorithmic optimizations & data structures
+(Type 'mukund' or 'kisaan' to learn more about specific featured platforms)`,
 
     kisaan: () => `[Project Spotlight: Kisaan Sathi]
 Status: Live in Production • High Community Impact
@@ -524,6 +526,14 @@ Summary:
 - Features: AI-guided crop disease diagnosis, soil care, irrigation support, & government scheme navigator.
 - Technology: JavaScript, Node.js/Flask, AI API services, responsive multilingual UI.
 - Impact: Democratizing agronomist-grade guidance directly into the hands of farmers.`,
+
+    mukund: () => `[Project Spotlight: Mukund Pratap Srivastav Portfolio]
+Status: Live in Production • Scalable Systems Architecture
+Website: https://mukund-pratap-srivastav.vercel.app/
+Summary:
+- State-of-the-art engineering portfolio built for Software Engineer Mukund Pratap Srivastav.
+- Royal architectural aesthetic with burgundy, copper, gold & obsidian geometry.
+- Interactive Canvas 2D constellation particle engine, modular systems showcase, and responsive UX.`,
 
     contact: () => `Direct Contact Information:
 • Email:     dilshajashrafi87@gmail.com
@@ -651,6 +661,41 @@ Summary:
           </div>
           <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
             <a href="https://kissansathiindia.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+              <span>Launch Live Website</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+          </div>
+        </div>
+      `
+    },
+    mukund_portfolio: {
+      title: '🏛️ Mukund Pratap Srivastav — Systems Architect & Engineering Platform',
+      content: `
+        <div style="display:flex; flex-direction:column; gap:1.25rem;">
+          <p style="font-size:1.05rem; line-height:1.7; color:var(--text-secondary);">
+            A bespoke, high-performance web platform and engineering portfolio engineered for <strong>Mukund Pratap Srivastav</strong> (Software Engineer & Distributed Systems Architect). Designed with an architectural aesthetic featuring copper-gold embers, geometric diamond lattices, and interactive systems showcases.
+          </p>
+          <div style="background:var(--bg-tertiary); padding:1rem 1.25rem; border-radius:var(--radius-md); border-left:3px solid #d4af37;">
+            <h4 style="margin-bottom:0.5rem; color:var(--text-primary);">Key Architectural Innovations:</h4>
+            <ul style="padding-left:1.25rem; color:var(--text-secondary); line-height:1.6; display:flex; flex-direction:column; gap:0.4rem;">
+              <li><strong>Interactive Canvas 2D Physics:</strong> Bespoke constellation particle engine rendering copper embers and connected neural nodes at 60 FPS.</li>
+              <li><strong>Royal Engineering Aesthetic:</strong> Hand-crafted palette featuring Ivory greenish white, Burgundy reddish copper shine, Gold texture, and Bluish off Obsidian depth.</li>
+              <li><strong>Systems Showcase & Case Studies:</strong> Interactive modules detailing Cloud Systems, Microservices, and High-Performance Distributed Systems.</li>
+              <li><strong>Global Cloud Deployment:</strong> Optimized for zero-latency worldwide edge delivery via Vercel.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="margin-bottom:0.5rem; color:var(--text-primary);">Technology Stack:</h4>
+            <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+              <span class="tech-chip">HTML5 / Modern CSS</span>
+              <span class="tech-chip">JavaScript (ES6+)</span>
+              <span class="tech-chip">Canvas 2D Physics</span>
+              <span class="tech-chip">Vercel Edge Cloud</span>
+              <span class="tech-chip">Systems Architecture</span>
+            </div>
+          </div>
+          <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
+            <a href="https://mukund-pratap-srivastav.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
               <span>Launch Live Website</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
             </a>
