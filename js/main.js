@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- 11. Full-Stack Contact Form (Dispatches to Gmail & SQLite) ---
+  // --- 11. Full-Stack Contact Form (Dispatches via FormSubmit & SQLite) ---
   const contactForm = document.getElementById('contact-form');
   const submitBtn = contactForm ? contactForm.querySelector('button[type="submit"]') : null;
 
@@ -398,50 +398,70 @@ document.addEventListener('DOMContentLoaded', () => {
       // Loading state
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span>Delivering to Gmail...</span>`;
+        submitBtn.innerHTML = `<span>Sending via FormSubmit...</span>`;
       }
 
-      // Default Gmail compose fallback URL
-      let gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=dilshajashrafi87@gmail.com&su=${encodeURIComponent('Portfolio Message from ' + name + ': ' + (subject || 'Inquiry'))}&body=${encodeURIComponent('Hello Dilshaj,\n\nName: ' + name + '\nEmail: ' + email + '\n\n' + message)}`;
+      const formSubmitEndpoint = 'https://formsubmit.co/ajax/dilshajashrafi87@gmail.com';
+      let sentSuccessfully = false;
 
+      try {
+        // 1. Primary Dispatch via FormSubmit AJAX API
+        const fsResponse = await fetch(formSubmitEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            subject: subject || 'Portfolio Message',
+            message: message,
+            _subject: `New Portfolio Message from ${name}: ${subject || 'Inquiry'}`,
+            _captcha: 'false',
+            _template: 'table'
+          })
+        });
+
+        const fsData = await fsResponse.json();
+        if (fsResponse.ok && (fsData.success === 'true' || fsData.success === true)) {
+          sentSuccessfully = true;
+          showToast(`🎉 Message delivered to Dilshaj's Gmail via FormSubmit!`);
+          contactForm.reset();
+        }
+      } catch (fsErr) {
+        console.warn('FormSubmit AJAX attempt encountered an issue:', fsErr);
+      }
+
+      // 2. Parallel / Secondary: Also persist to local SQLite backend if available
       if (isBackendLive) {
         try {
-          const response = await fetch('/api/contact', {
+          await fetch('/api/contact', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, subject, message })
           });
-
-          const resData = await response.json();
-
-          if (response.ok && resData.success) {
-            if (resData.gmail_compose_url) {
-              gmailComposeUrl = resData.gmail_compose_url;
-            }
-
-            if (resData.email_sent) {
-              showToast(`🎉 Message delivered directly to Dilshaj's Gmail!`);
-            } else {
-              showToast(`✓ Message recorded! Opening Gmail to dispatch...`);
-              window.open(gmailComposeUrl, '_blank');
-            }
-            contactForm.reset();
-            return;
-          }
-        } catch (err) {
-          console.error('Backend submission failed, opening Gmail directly', err);
-        } finally {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = `<span>Send Directly to Gmail</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
-          }
+        } catch (dbErr) {
+          console.log('Backend logging skipped:', dbErr);
         }
       }
 
-      // If backend offline, open direct Gmail compose tab
-      showToast('Opening Gmail directly to send message...');
-      window.open(gmailComposeUrl, '_blank');
-      contactForm.reset();
+      // 3. Fallback: If AJAX failed, submit standard HTML FormSubmit form or Gmail
+      if (!sentSuccessfully) {
+        try {
+          contactForm.submit();
+          return;
+        } catch (subErr) {
+          const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=dilshajashrafi87@gmail.com&su=${encodeURIComponent('Portfolio Message from ' + name + ': ' + (subject || 'Inquiry'))}&body=${encodeURIComponent('Hello Dilshaj,\n\nName: ' + name + '\nEmail: ' + email + '\n\n' + message)}`;
+          window.open(gmailComposeUrl, '_blank');
+          contactForm.reset();
+        }
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<span>Send Message</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
+      }
     });
   }
 

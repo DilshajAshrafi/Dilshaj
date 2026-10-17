@@ -958,41 +958,47 @@ Type 'help' or click any button above to explore my work, backend database, and 
             </div>
           </div>
 
-          <!-- Contact Form with Automatic Gmail Notification -->
-          <div class="contact-form-card">
-            <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem;">Send a Message</h3>
-            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem;">
-              Fill in the form to deliver your message straight to Dilshaj's Gmail inbox.
-            </p>
+            <!-- Contact Form with FormSubmit Integration -->
+            <div class="contact-form-card">
+              <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem;">Send a Message</h3>
+              <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem;">
+                Fill in the form to deliver your message straight to Dilshaj's Gmail inbox via FormSubmit.
+              </p>
 
-            <form id="contact-form" class="contact-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="form-name" class="form-label">Your Name *</label>
-                  <input type="text" id="form-name" class="form-input" placeholder="e.g. Alex Johnson" required>
+              <form id="contact-form" class="contact-form" action="https://formsubmit.co/dilshajashrafi87@gmail.com" method="POST">
+                <!-- FormSubmit Configuration -->
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_subject" value="New Portfolio Message from Dilshaj Ashrafi Website">
+                <input type="text" name="_honey" style="display:none">
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="form-name" class="form-label">Your Name *</label>
+                    <input type="text" id="form-name" name="name" class="form-input" placeholder="e.g. Alex Johnson" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="form-email" class="form-label">Your Email *</label>
+                    <input type="email" id="form-email" name="email" class="form-input" placeholder="name@domain.com" required>
+                  </div>
                 </div>
+
                 <div class="form-group">
-                  <label for="form-email" class="form-label">Your Email *</label>
-                  <input type="email" id="form-email" class="form-input" placeholder="name@domain.com" required>
+                  <label for="form-subject" class="form-label">Subject</label>
+                  <input type="text" id="form-subject" name="subject" class="form-input" placeholder="Project Inquiry / Job Opportunity">
                 </div>
-              </div>
 
-              <div class="form-group">
-                <label for="form-subject" class="form-label">Subject</label>
-                <input type="text" id="form-subject" class="form-input" placeholder="Project Inquiry / Job Opportunity">
-              </div>
+                <div class="form-group">
+                  <label for="form-message" class="form-label">Your Message *</label>
+                  <textarea id="form-message" name="message" class="form-textarea" placeholder="Hi Dilshaj, I'd love to connect regarding..." required></textarea>
+                </div>
 
-              <div class="form-group">
-                <label for="form-message" class="form-label">Your Message *</label>
-                <textarea id="form-message" class="form-textarea" placeholder="Hi Dilshaj, I'd love to connect regarding..." required></textarea>
-              </div>
-
-              <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.9rem;">
-                <span>Send Directly to Gmail</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-              </button>
-            </form>
-          </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.9rem;">
+                  <span>Send Message</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+              </form>
+            </div>
 
         </div>
 
