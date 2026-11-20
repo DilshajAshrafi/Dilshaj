@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Project-focused resume for Dilshaj Ashrafi, a CSE + AI student focused on web and application development and artificial intelligence.">
+  <meta name="author" content="Dilshaj Ashrafi">
+  <meta name="theme-color" content="#05090d">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <title>Resume — Dilshaj Ashrafi</title>
+  <style>
+    :root { color-scheme: dark; --green:#b7fa63; --blue:#47b8ff; --ink:#080d11; --text:#edf5f5; --muted:#a2b0b4; --line:rgba(255,255,255,.13); }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#05090d; color:var(--text); font:14px/1.65 "Segoe UI",Arial,sans-serif; }
+    a { color:inherit; }
+    .toolbar { width:min(900px,calc(100% - 40px)); margin:24px auto; display:flex; justify-content:space-between; align-items:center; gap:16px; }
+    .toolbar a { color:var(--green); text-decoration:none; font-size:12px; }
+    .toolbar button { padding:11px 16px; border:0; background:var(--green); color:#07100b; font-weight:700; cursor:pointer; }
+    .resume { width:min(900px,calc(100% - 40px)); margin:0 auto 50px; padding:clamp(25px,6vw,58px); border:1px solid var(--line); background:linear-gradient(145deg,#0b141a,#080d11 70%); }
+    .eyebrow { color:var(--green); font:10px Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; }
+    .resume-heading { display:grid; grid-template-columns:112px minmax(0,1fr); align-items:center; gap:24px; }
+    .resume-photo { width:112px; height:112px; object-fit:cover; object-position:center 32%; border:2px solid rgba(183,250,99,.75); border-radius:50%; box-shadow:0 0 0 7px rgba(71,184,255,.07),0 0 30px rgba(71,184,255,.13); }
+    h1 { margin:10px 0 0; font-size:clamp(36px,7vw,58px); letter-spacing:-.06em; line-height:1; }
+    .role { margin:12px 0; color:var(--blue); font-size:16px; }
+    .contact { display:flex; flex-wrap:wrap; gap:8px 18px; padding-bottom:22px; border-bottom:1px solid var(--line); color:var(--muted); font-size:12px; }
+    .contact a { text-decoration:none; }
+    section { margin-top:25px; }
+    h2 { margin:0 0 10px; color:var(--green); font:11px Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; }
+    p { margin:0; color:#c2ccce; }
+    .project { padding:13px 0; border-top:1px solid var(--line); }
+    .project h3 { margin:0 0 4px; font-size:15px; }
+    .project p { font-size:12px; }
+    .project a { display:inline-block; margin-top:5px; color:var(--blue); font-size:11px; }
+    .skills { color:#c2ccce; }
+    .note { margin-top:24px; padding-top:14px; border-top:1px solid var(--line); color:var(--muted); font-size:10px; }
+    @media (max-width:520px) {
+      .resume-heading { grid-template-columns:84px minmax(0,1fr); gap:16px; }
+      .resume-photo { width:84px; height:84px; }
+      .resume-heading h1 { font-size:clamp(28px,7vw,38px); }
+      .resume-heading .role { font-size:14px; }
+    }
+    @media print {
+      @page { size:A4; margin:15mm; }
+      :root { color-scheme:light; }
+      body { background:#fff; color:#101619; font-size:11px; }
+      .toolbar, .note { display:none !important; }
+      .resume { width:auto; margin:0; padding:0; border:0; background:#fff; }
+      h1 { font-size:34px; }
+      .resume-heading { grid-template-columns:88px 1fr; gap:18px; }
+      .resume-photo { width:88px; height:88px; border-color:#285f28; box-shadow:none; }
+      .resume-heading h1 { font-size:34px; }
+      .contact, p, .project p, .skills { color:#313d42; }
+      h2, .eyebrow { color:#285f28; }
+      .role { color:#155f80; }
+      .project { break-inside:avoid; }
+      a { color:#155f80; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <a href="index.html">← BACK TO PORTFOLIO</a>
+    <button type="button" onclick="window.print()">PRINT / SAVE AS PDF</button>
+  </div>
+  <main class="resume">
+    <header class="resume-heading">
+      <img class="resume-photo" src="assets/dilshaj-face-cropped.jpg" alt="Portrait of Dilshaj Ashrafi">
+      <div>
+        <div class="eyebrow">Portfolio resume / 2026</div>
+        <h1>Dilshaj Ashrafi</h1>
+        <p class="role">CSE + AI Student · Web &amp; App Development · Artificial Intelligence</p>
+      </div>
+    </header>
+    <div class="contact">
+      <a href="mailto:dilshajashrafi@gmail.com">dilshajashrafi@gmail.com</a>
+      <a href="tel:+918292992959">+91 82929 92959</a>
+      <a href="https://wa.me/918292992959" target="_blank" rel="noreferrer">WhatsApp</a>
+      <a href="https://github.com/DilshajAshrafi">github.com/DilshajAshrafi</a>
+      <a href="https://www.instagram.com/dilshaj_ashrafi2/">Instagram</a>
+      <span>India</span>
+    </div>
+
+    <section>
+      <h2>Profile</h2>
+      <p>CSE + AI student focused on web and application development and artificial intelligence. Co-creator of Kisaan Sathi, a smart farmer platform bringing AI into a practical web experience.</p>
+    </section>
+
+    <section>
+      <h2>Application development</h2>
+      <p>Interested in building useful web apps by shaping clear user flows, responsive interfaces, and features around real problems. Current project examples include the Kisaan Sathi farmer-support platform and the Mind Care wellbeing project, with AI used where it adds practical value.</p>
+    </section>
+
+    <section>
+      <h2>Selected projects</h2>
+      <article class="project">
+        <h3>Kisaan Sathi — Smart Farmer AI Platform</h3>
+        <p>Co-created a farmer-support web application with AI-focused crop guidance, irrigation planning, soil and pest care, and scheme information.</p>
+        <a href="https://kissansathiindia.vercel.app/">View live project ↗</a>
+        <a href="https://github.com/DilshajAshrafi/kissan-sathi">Web source ↗</a>
+      </article>
+      <article class="project">
+        <h3>Autonomous AI Assistant &amp; Knowledge Engine</h3>
+        <p>Featured project exploring autonomous AI assistance and connected knowledge systems.</p>
+      </article>
+      <article class="project">
+        <h3>Mind Care — Collaborative AI-enabled Website</h3>
+        <p>A student-made wellbeing web app with mood reflection, focus tools, multilingual support, and optional AI chat. The project README credits Dilshaj among four developers.</p>
+        <a href="https://github.com/DilshajAshrafi/mind-care">Source repository ↗</a>
+      </article>
+    </section>
+
+    <section>
+      <h2>Technical focus</h2>
+      <p class="skills">Web &amp; app development · Responsive interfaces and user flows · Full-stack applications · Artificial intelligence · AI-powered web products</p>
+    </section>
+    <p class="note">This project-focused resume uses information published in Dilshaj's portfolio. Add education, employment history, dates, and measurable outcomes before using it as a formal job-application CV.</p>
+  </main>
+</body>
+</html>
