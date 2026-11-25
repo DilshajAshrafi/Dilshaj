@@ -1,4 +1,4 @@
-const CACHE_NAME = "dilshaj-portfolio-shell-v6";
+const CACHE_NAME = "dilshaj-portfolio-shell-v7";
 const APP_SHELL = [
   "./",
   "./index.html",
