@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="ocean" cx="30%" cy="25%" r="82%">
+      <stop stop-color="#6de5f0"/>
+      <stop offset=".2" stop-color="#209fc9"/>
+      <stop offset=".58" stop-color="#086b9d"/>
+      <stop offset="1" stop-color="#021426"/>
+    </radialGradient>
+    <linearGradient id="land" x1="0" y1="0" x2=".8" y2="1">
+      <stop stop-color="#d8efad"/>
+      <stop offset=".48" stop-color="#77c889"/>
+      <stop offset="1" stop-color="#287c6e"/>
+    </linearGradient>
+    <radialGradient id="night-shade" cx="29%" cy="26%" r="83%">
+      <stop offset=".35" stop-color="#020713" stop-opacity="0"/>
+      <stop offset="1" stop-color="#020713" stop-opacity=".82"/>
+    </radialGradient>
+    <clipPath id="globe">
+      <circle cx="256" cy="256" r="242"/>
+    </clipPath>
+  </defs>
+  <circle cx="256" cy="256" r="250" fill="#041422" stroke="#76e7ef" stroke-opacity=".62" stroke-width="5"/>
+  <g clip-path="url(#globe)">
+    <circle cx="256" cy="256" r="242" fill="url(#ocean)"/>
+    <g fill="none" stroke="#bceff0" stroke-opacity=".15" stroke-width="2">
+      <ellipse cx="256" cy="256" rx="88" ry="242"/>
+      <ellipse cx="256" cy="256" rx="168" ry="242"/>
+      <path d="M17 192c150 37 328 37 478 0M14 319c154-38 330-38 484 0"/>
+    </g>
+    <g fill="url(#land)" stroke="#d1efaa" stroke-opacity=".4" stroke-width="2.5" stroke-linejoin="round">
+      <path d="m43 128 8-17 16-9 5-17 18-9 14 5 10-13 18 2 7 15 16 1 11 12 16-1 12 11 17 5 8 13 14 5 5 14-10 10-15 2-9 12-15 1-10 11-2 17-13 10-6 15-15 5-9 14-13-5-8-13-13-4-7-15-13-8-4-15-14-6-7-15-13-8-5-16-10-7z"/>
+      <path d="m178 69 11-9 18 2 12-8 17 5 6 13-7 11-15 5-13-3-10 7-14-5-8-9z"/>
+      <path d="m151 244 13 3 12 11 12 1 14 16 4 18-7 15 7 16-7 18-8 15-5 20-10 20-6 22-10 15-8-13-3-20-10-16 2-22-9-18 2-20-9-18 6-16-4-19 8-15z"/>
+      <path d="m193 129 12-17 14-5 11-12 15 4 9-9 15 7 13-5 15 10 16-5 14 9 15-6 16 10 17-5 14 11 19-4 18 11 19 3 11 14-10 11-17 2-7 11-15 3-10 12-16-1-12 10-16-5-11 13-16-6-10 12-15-6-14 10-13-8-13 8-14-11-12 4-9-12-15 4-8-13-13 1-7-14-12-4z"/>
+      <path d="m213 204 13-10 14 2 12-6 14 7 10 12-2 14 9 14-6 12 8 15-8 13 4 16-9 13-5 18-10 16-5 19-9 13-9-12-4-18-9-16-2-19-9-16 2-18-8-15 6-16-8-14 7-14-4-14z"/>
+      <path d="m282 204 16 3 12 11 8 14-8 11-14-1-10-12-9-12z"/>
+      <path d="m311 228 15 3 11 12 2 16-7 15-6 18-8-8-6-16-10-13 3-16z"/>
+      <path d="m343 238 13 5 9 12-3 13 10 13-7 9-11-10-3-14-12-8z"/>
+      <path d="m376 344 15-9 18 3 13 10 17 3 11 12-8 15-15 5-13 12-17-4-12-10-15-5-5-14z"/>
+      <path d="m372 212 5-13 7 3 2 12-6 8z"/>
+      <path d="m296 350 6 9-3 17-6-9z"/>
+      <path d="M90 457c48 12 97 17 148 17s101-5 151-17l-13 22H101z" fill="#d2e8de" fill-opacity=".72"/>
+    </g>
+    <g fill="none" stroke="#d7fbf7" stroke-linecap="round">
+      <path d="M38 179c67-31 125-27 188-5 63 22 145 22 247-3" stroke-opacity=".22" stroke-width="6"/>
+      <path d="M55 309c75-27 142-22 205 2 61 24 116 25 180 5" stroke-opacity=".16" stroke-width="5"/>
+    </g>
+    <circle cx="256" cy="256" r="242" fill="url(#night-shade)"/>
+  </g>
+  <circle cx="256" cy="256" r="246" fill="none" stroke="#8ee6f2" stroke-opacity=".46" stroke-width="2"/>
+</svg>

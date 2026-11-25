@@ -312,10 +312,11 @@
     .visual-one { background: radial-gradient(ellipse at 53% 35%, rgba(37,149,173,.4), transparent 42%), linear-gradient(135deg,#102a36,#081117 65%); }
     .visual-two { background: radial-gradient(ellipse at 50% 40%, rgba(103,159,61,.28), transparent 42%), linear-gradient(135deg,#1c281a,#0a1110 68%); }
     .visual-four { background: radial-gradient(ellipse at 50% 36%, rgba(71,184,255,.25), transparent 42%), linear-gradient(135deg,#102335,#0a1118 68%); }
-    .abstract-ring { position: absolute; left: 50%; top: 43%; width: 240px; height: 240px; border: 1px solid rgba(71,184,255,.48); border-radius: 50%; transform: translate(-50%,-50%) rotateX(68deg) rotate(-32deg); box-shadow: 0 0 40px rgba(71,184,255,.1), inset 0 0 30px rgba(71,184,255,.08); animation: ring-breathe 5s ease-in-out infinite; }
-    .abstract-ring::before, .abstract-ring::after { content: ""; position: absolute; inset: 20px; border: 1px solid rgba(183,250,99,.38); border-radius: 50%; background: radial-gradient(circle at 50% 0,rgba(183,250,99,.9) 0 2px,rgba(183,250,99,.2) 3px 5px,transparent 6px); animation: ring-node-orbit 16s linear infinite; }
-    .abstract-ring::after { inset: 55px; border-color: rgba(71,184,255,.35); background: radial-gradient(circle at 50% 0,rgba(71,184,255,.95) 0 2px,rgba(71,184,255,.2) 3px 5px,transparent 6px); animation-duration: 23s; animation-direction: reverse; }
-    .visual-two .abstract-ring { border-color: rgba(183,250,99,.42); transform: translate(-50%,-50%) rotateX(62deg) rotate(22deg); }
+    .project-scene { position: absolute; top: 8%; left: 50%; width: min(90%, 420px); height: 62%; transform: translateX(-50%); overflow: visible; }
+    .scene-sway { transform-box: fill-box; transform-origin: center bottom; animation: scene-sway 4s ease-in-out infinite alternate; }
+    .scene-pulse { transform-box: fill-box; transform-origin: center; animation: scene-pulse 4s ease-in-out infinite alternate; }
+    .scene-orbit { transform-box: fill-box; transform-origin: center; animation: scene-orbit 18s linear infinite; }
+    .scene-drift { animation: scene-drift 5s ease-in-out infinite alternate; }
     .project-index { position: absolute; top: 22px; left: 24px; z-index: 2; color: #bdc9cb; font: 10px var(--mono); }
     .project-copy { position: absolute; z-index: 2; left: 27px; right: 27px; bottom: 25px; }
     .project-tags { display: flex; gap: 8px; margin-bottom: 13px; }
@@ -326,7 +327,6 @@
     .project-card:hover { border-color: rgba(71,184,255,.45); box-shadow: 0 16px 55px rgba(0,0,0,.3), 0 0 35px rgba(71,184,255,.06); }
     .project-card:hover::before { opacity: 1; }
     .project-card:hover .project-visual { transform: perspective(900px) rotateX(var(--tilt-y)) rotateY(var(--tilt-x)) scale(1.05); }
-    .project-card:hover .abstract-ring { animation: ring-turn 6s linear infinite, ring-breathe 3s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(71,184,255,.35)); }
     .project-card[data-reveal].visible:hover { transform: translateY(-5px); }
     .project-card[hidden] { display: none; }
     .project-card.filter-arrive { animation: project-filter-arrive .48s cubic-bezier(.2,.7,.2,1) both; }
@@ -415,9 +415,6 @@
     .learning-note::after { position: absolute; top: -30%; bottom: -30%; left: -50%; width: 45%; content: ""; background: linear-gradient(90deg,transparent,rgba(71,184,255,.045),rgba(183,250,99,.13),transparent); pointer-events: none; }
     .learning-note h4 { margin: 10px 0 8px; font-size: 14px; }
     .learning-note p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.75; }
-    .sound-toggle { padding: 7px 10px; border: 1px solid var(--line); background: transparent; color: #9cacb1; cursor: pointer; font: 9px var(--mono); letter-spacing: .08em; }
-    .sound-toggle[aria-pressed="true"] { border-color: var(--green); color: var(--green); }
-    .sound-toggle:disabled { cursor: not-allowed; opacity: .7; }
     .install-app { padding: 7px 10px; border: 1px solid rgba(71,184,255,.35); background: transparent; color: var(--blue); cursor: pointer; font: 9px var(--mono); letter-spacing: .08em; }
     .install-app[hidden] { display: none; }
 
@@ -602,10 +599,11 @@
     @keyframes earth-revolution { to { transform: translate(-50%,-50%) rotate(360deg); } }
     @keyframes earth-orientation { to { transform: translate(-50%,-50%) rotate(360deg); } }
     @keyframes earth-atmosphere { 50% { box-shadow: 0 0 64px rgba(71,184,255,.34), inset -18px -18px 34px rgba(0,0,0,.7); } }
-    @keyframes ring-breathe { 50% { opacity: .78; box-shadow: 0 0 55px rgba(71,184,255,.17), inset 0 0 38px rgba(71,184,255,.13); } }
-    @keyframes ring-node-orbit { to { transform: rotate(360deg); } }
+    @keyframes scene-sway { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+    @keyframes scene-pulse { from { opacity: .65; transform: scale(.96); } to { opacity: 1; transform: scale(1.05); } }
+    @keyframes scene-orbit { to { transform: rotate(360deg); } }
+    @keyframes scene-drift { from { transform: translateY(0); } to { transform: translateY(-8px); } }
     @keyframes float { 50% { transform: translate3d(var(--orbital-x,0px),calc(-46% + var(--orbital-y,0px)),0) rotate(2deg); } }
-    @keyframes ring-turn { to { transform: translate(-50%,-50%) rotateX(68deg) rotate(328deg); } }
     @keyframes rise-in { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
     @keyframes text-glow { 50% { text-shadow:0 0 28px rgba(183,250,99,.3); } }
     @keyframes orbit-spin { to { transform: rotateX(68deg) rotate(337deg); } }
@@ -631,6 +629,15 @@
     @keyframes button-sheen { to { left:130%; } }
     @keyframes marquee { to { transform:translateX(-50%); } }
 
+    @media (max-width: 1024px) {
+      .hero { height: auto; min-height: max(760px, 100svh); }
+      .hero-content { padding-bottom: 110px; }
+      .orbital { width: clamp(210px, 38vw, 340px); right: 2%; top: 220px; opacity: .8; animation: none; transform: translateY(-50%); }
+      .solar-revolution { width: 100%; animation: none; }
+      .earth-system { top: 50%; animation: none; }
+      .orbital-core, .orbital-scan { top: 25%; left: 25%; width: 50%; height: 50%; }
+      .solar-body, .solar-link, .solar-readout, .solar-orbit-track { display: none; }
+    }
     @media (max-width: 760px) {
       .chapter-hud { display: none; }
       .shell { width: min(100% - 40px, 560px); }
@@ -640,15 +647,13 @@
       .command-trigger { padding: 7px 8px; }
       .nav-availability { display: none; }
       .hero { height: auto; min-height: 760px; }
-      .hero-content { padding-top: 105px; }
+      .hero-content { padding-top: 105px; padding-bottom: 90px; }
       h1 { font-size: clamp(58px, 15vw, 100px); }
-      .orbital { width: 68vw; right: -14%; top: 42%; opacity: .55; }
+      .orbital { width: clamp(210px, 58vw, 300px); right: -4%; top: 245px; opacity: .75; }
       .earth-system { --satellite-radius: clamp(38px, 10vw, 70px); }
       .solar-readout { display: none; }
       .lunar-track, .lunar-orbit { width: 50%; height: 50%; }
-      .orbital-core, .orbital-scan { top: 31%; left: 31%; width: 38%; height: 38%; }
       .lunar-body { width: 14%; }
-      .orbital-core, .orbital-scan { top: 30%; left: 30%; width: 40%; height: 40%; }
       .orbit-satellite { display: none; }
       .hero-bottom { display: block; margin-top: 25px; }
       .hero-copy { max-width: 330px; }
@@ -689,15 +694,13 @@
       .command-trigger { padding: 6px 7px; font-size: 8px; }
       .brand { font-size: 11px; gap: 8px; }
       .brand-mark { width: 23px; height: 23px; }
+      .brand-name { display: none; }
       .hero-actions { gap: 17px; }
       .earth-telemetry { gap: 8px; }
       .button { padding: 0 14px; }
       .project-card { min-height: 300px; }
       .stat-row { gap: 8px; }
       .stat strong { font-size: 23px; }
-    }
-    @media (max-width: 340px) {
-      .brand-name { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -903,7 +906,19 @@
         </div>
         <div class="project-grid">
           <article class="project-card" id="project-kisaan" data-project-category="web ai" data-reveal>
-            <div class="project-visual visual-one"><span class="abstract-ring"></span></div>
+            <div class="project-visual visual-one" aria-hidden="true">
+              <svg class="project-scene" viewBox="0 0 400 220" focusable="false">
+                <circle cx="200" cy="104" r="85" fill="none" stroke="#47b8ff" stroke-opacity=".25"/>
+                <circle class="scene-pulse" cx="200" cy="104" r="67" fill="#b7fa63" fill-opacity=".08" stroke="#b7fa63" stroke-opacity=".35"/>
+                <path d="M37 193 Q112 147 200 164 Q290 137 363 193" fill="none" stroke="#47b8ff" stroke-opacity=".55" stroke-width="2"/>
+                <path d="M57 208 Q124 171 189 185 M217 185 Q281 169 344 208" fill="none" stroke="#b7fa63" stroke-opacity=".55" stroke-width="2"/>
+                <g class="scene-sway" fill="none" stroke="#b7fa63" stroke-linecap="round" stroke-width="4">
+                  <path d="M200 166 V82 M200 130 Q165 126 163 103 Q188 102 200 125 M200 114 Q228 108 231 86 Q209 86 200 108"/>
+                  <path d="M143 177 V140 M143 160 Q128 158 126 146 M257 177 V139 M257 160 Q273 158 275 146" stroke-width="3"/>
+                </g>
+                <circle class="scene-pulse" cx="200" cy="71" r="4" fill="#dfff9c"/>
+              </svg>
+            </div>
             <span class="project-index">FEATURED PROJECT / 01</span>
             <div class="project-copy">
               <div class="project-tags"><span class="tag">Artificial intelligence</span><span class="tag">Web development</span></div>
@@ -913,7 +928,21 @@
             </div>
           </article>
           <article class="project-card" id="project-ai" data-project-category="ai" data-reveal>
-            <div class="project-visual visual-two"><span class="abstract-ring"></span></div>
+            <div class="project-visual visual-two" aria-hidden="true">
+              <svg class="project-scene" viewBox="0 0 400 220" focusable="false">
+                <circle class="scene-orbit" cx="200" cy="105" r="89" fill="none" stroke="#47b8ff" stroke-opacity=".45" stroke-dasharray="5 12"/>
+                <g fill="none" stroke="#47b8ff" stroke-opacity=".6" stroke-width="2">
+                  <path d="M200 105 145 59 M200 105 250 56 M200 105 279 119 M200 105 248 164 M200 105 150 161 M200 105 121 112"/>
+                  <path d="M145 59 250 56 279 119 248 164 150 161 121 112 Z" stroke-opacity=".3"/>
+                </g>
+                <g class="scene-pulse">
+                  <rect x="169" y="74" width="62" height="62" rx="12" fill="#0b2630" stroke="#b7fa63" stroke-width="2"/>
+                  <path d="M180 94h40M180 105h40M180 116h40" stroke="#47b8ff" stroke-width="2"/>
+                  <circle cx="200" cy="105" r="8" fill="#b7fa63"/>
+                </g>
+                <g fill="#b7fa63"><circle cx="145" cy="59" r="5"/><circle cx="250" cy="56" r="5"/><circle cx="279" cy="119" r="5"/><circle cx="248" cy="164" r="5"/><circle cx="150" cy="161" r="5"/><circle cx="121" cy="112" r="5"/></g>
+              </svg>
+            </div>
             <span class="project-index">ENGINEERING / 02</span>
             <div class="project-copy">
               <div class="project-tags"><span class="tag">Artificial intelligence</span><span class="tag">Knowledge systems</span></div>
@@ -923,7 +952,17 @@
             </div>
           </article>
           <article class="project-card" id="project-mind-care" data-project-category="web ai" data-reveal>
-            <div class="project-visual visual-four"><span class="abstract-ring"></span></div>
+            <div class="project-visual visual-four" aria-hidden="true">
+              <svg class="project-scene" viewBox="0 0 400 220" focusable="false">
+                <circle class="scene-pulse" cx="200" cy="105" r="80" fill="#47b8ff" fill-opacity=".06" stroke="#47b8ff" stroke-opacity=".35"/>
+                <circle cx="200" cy="105" r="60" fill="none" stroke="#b7fa63" stroke-opacity=".25"/>
+                <g class="scene-drift">
+                  <path d="M200 151 C190 133 150 124 157 101 C161 86 179 82 190 96 L200 107 L210 96 C221 82 239 86 243 101 C250 124 210 133 200 151Z" fill="#47b8ff" fill-opacity=".18" stroke="#b7fa63" stroke-width="2"/>
+                  <path d="M180 118 Q200 110 220 118" fill="none" stroke="#d7f7f7" stroke-opacity=".75" stroke-width="2" stroke-linecap="round"/>
+                </g>
+                <g fill="#b7fa63" fill-opacity=".8"><circle cx="122" cy="65" r="3"/><circle cx="282" cy="86" r="3"/><circle cx="259" cy="155" r="2"/><circle cx="145" cy="143" r="2"/></g>
+              </svg>
+            </div>
             <span class="project-index">WEB + AI / 03</span>
             <div class="project-copy">
               <div class="project-tags"><span class="tag">AI-enabled web app</span><span class="tag">Team project</span></div>
@@ -1161,7 +1200,6 @@
       <span>© 2026 DILSHAJ ASHRAFI</span>
       <span>CSE + AI / WEB + APP DEVELOPMENT</span>
       <button class="install-app" id="install-app" type="button" hidden>INSTALL APP</button>
-      <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="false">SOUND: OFF</button>
       <a class="back-top" href="#top">BACK TO TOP ↑</a>
     </div>
   </footer>
@@ -1982,57 +2020,6 @@
       document.querySelector("#form-status").textContent = "Opening your email app. Review the draft there, then press Send.";
       window.location.href = `mailto:dilshajashrafi@gmail.com?subject=${subject}&body=${body}`;
     });
-
-    const soundToggle = document.querySelector("#sound-toggle");
-    const AudioContextConstructor = window.AudioContext;
-    let audioContext = null;
-    let soundEnabled = false;
-
-    function updateSoundToggle() {
-      soundToggle.setAttribute("aria-pressed", String(soundEnabled));
-      soundToggle.textContent = soundEnabled ? "SOUND: ON" : "SOUND: OFF";
-      soundToggle.setAttribute("aria-label", soundEnabled ? "Disable interface sound effects" : "Enable interface sound effects");
-    }
-
-    function playInterfaceSound() {
-      if (!audioContext || audioContext.state !== "running") return;
-      const oscillator = audioContext.createOscillator();
-      const volume = audioContext.createGain();
-      const start = audioContext.currentTime;
-      oscillator.type = "sine";
-      oscillator.frequency.setValueAtTime(660, start);
-      oscillator.frequency.exponentialRampToValueAtTime(440, start + .07);
-      volume.gain.setValueAtTime(.025, start);
-      volume.gain.exponentialRampToValueAtTime(.001, start + .075);
-      oscillator.connect(volume);
-      volume.connect(audioContext.destination);
-      oscillator.start(start);
-      oscillator.stop(start + .08);
-    }
-
-    if (!AudioContextConstructor) {
-      soundToggle.hidden = true;
-    } else {
-      soundToggle.addEventListener("click", () => {
-        soundEnabled = !soundEnabled;
-        updateSoundToggle();
-        if (!soundEnabled) return;
-        audioContext = audioContext || new AudioContextConstructor();
-        audioContext.resume().then(playInterfaceSound).catch(() => {
-          soundEnabled = false;
-          updateSoundToggle();
-          soundToggle.disabled = true;
-          soundToggle.textContent = "SOUND UNAVAILABLE";
-          soundToggle.setAttribute("aria-label", "Interface sound effects unavailable");
-        });
-      });
-
-      document.addEventListener("click", (event) => {
-        if (!soundEnabled || !(event.target instanceof Element)) return;
-        const interactive = event.target.closest("button, a");
-        if (interactive && interactive !== soundToggle) playInterfaceSound();
-      });
-    }
 
     const installAppButton = document.querySelector("#install-app");
     let installPromptEvent = null;
