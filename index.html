@@ -12,9 +12,12 @@
   <meta property="og:description" content="CSE + AI student focused on web and application development and artificial intelligence. Co-creator of Kisaan Sathi.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dilshaj.vercel.app/">
-  <meta property="og:image" content="https://dilshaj.vercel.app/assets/app-icon-512.png">
-  <meta property="og:image:alt" content="Dilshaj Ashrafi portfolio mark">
+  <meta property="og:image" content="https://dilshaj.vercel.app/assets/social-preview.jpg">
+  <meta property="og:image:alt" content="Dilshaj Ashrafi portfolio with a blue-green Earth illustration">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://dilshaj.vercel.app/assets/social-preview.jpg">
   <link rel="canonical" href="https://dilshaj.vercel.app/">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="manifest" href="manifest.webmanifest">
@@ -128,8 +131,8 @@
     .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 12px var(--green); animation: pulse 2s infinite; }
 
     .hero {
-      min-height: 760px;
-      height: min(900px, 100svh);
+      min-height: min(900px, max(760px, 100svh));
+      height: auto;
       position: relative;
       display: flex;
       align-items: center;
@@ -140,7 +143,13 @@
         radial-gradient(ellipse at 12% 100%, rgba(24, 86, 97, .15), transparent 35%),
         #05090d;
     }
-    .hero::before { position: absolute; z-index: 0; inset: 0; pointer-events: none; content: ""; opacity: .7; background: radial-gradient(520px circle at var(--pointer-x,72%) var(--pointer-y,44%), rgba(71,184,255,.13), transparent 72%); }
+    .hero { --sky-glow: rgba(71,184,255,.13); }
+    .hero[data-sky-cycle="1"] { --sky-glow: rgba(83,207,181,.13); }
+    .hero[data-sky-cycle="2"] { --sky-glow: rgba(71,170,255,.16); }
+    .hero[data-sky-cycle="3"] { --sky-glow: rgba(111,154,255,.13); }
+    .hero::before { position: absolute; z-index: 0; inset: 0; pointer-events: none; content: ""; opacity: .7; background: radial-gradient(520px circle at var(--pointer-x,72%) var(--pointer-y,44%), var(--sky-glow), transparent 72%); }
+    .hero[data-day-phase="morning"] { background: radial-gradient(ellipse at 75% 48%,rgba(55,125,124,.27),transparent 40%),radial-gradient(ellipse at 12% 100%,rgba(67,125,92,.16),transparent 38%),#05090d; }
+    .hero[data-day-phase="evening"] { background: radial-gradient(ellipse at 75% 48%,rgba(49,77,137,.24),transparent 40%),radial-gradient(ellipse at 12% 100%,rgba(37,98,105,.16),transparent 38%),#05090d; }
     #starfield { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
     .hero-grid {
       position: absolute; inset: auto 0 0; height: 46%;
@@ -154,9 +163,10 @@
       mask-image: linear-gradient(transparent, black 80%);
       z-index: -1;
     }
-    .hero-content { position: relative; z-index: 2; padding-top: 82px; }
+    .hero-content { position: relative; z-index: 2; padding-top: 82px; padding-bottom: 125px; }
     .hero-topline { display: flex; align-items: center; gap: 14px; color: #9cabb0; font: 10px var(--mono); letter-spacing: .14em; animation: rise-in .8s .08s both; }
     .hero-topline::before { content: ""; width: 30px; height: 1px; background: var(--green); }
+    .hero-welcome { margin: 10px 0 0; color: #a7bbc0; font: 10px var(--mono); letter-spacing: .06em; }
     h1 { margin: 22px 0 18px; max-width: 760px; font-size: clamp(62px, 9.5vw, 128px); line-height: .91; letter-spacing: -.085em; font-weight: 600; animation: rise-in .9s .18s both; }
     h1 .outline { color: transparent; -webkit-text-stroke: 1px rgba(238,247,247,.7); background: linear-gradient(110deg,transparent 20%,rgba(71,184,255,.18) 43%,rgba(183,250,99,.42) 50%,transparent 60%); background-size: 240% 100%; background-position: 130% 0; -webkit-background-clip: text; background-clip: text; transition: background-position .4s ease,-webkit-text-stroke-color .3s ease,text-shadow .3s ease; }
     @media (hover: hover) and (pointer: fine) {
@@ -343,6 +353,9 @@
     .project-filters button:active { transform: scale(.97); }
     .project-count { margin: -10px 0 16px; color: #9eb4b9; font: 10px var(--mono); letter-spacing: .04em; }
     .project-count::before { display: inline-block; width: 5px; height: 5px; margin: 0 8px 2px 0; border-radius: 50%; background: var(--green); content: ""; }
+    .project-search { display: grid; gap: 7px; width: min(100%, 360px); margin: 0 0 18px; color: #b7c8cd; font: 10px var(--mono); }
+    .project-search input { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); background: #05090d; color: var(--white); font: 14px var(--sans); }
+    .project-search input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
     .project-filters button:hover, .project-filters button[aria-pressed="true"] { border-color: var(--green); color: var(--green); background: rgba(183,250,99,.06); }
 
     .about { position: relative; overflow: hidden; }
@@ -444,6 +457,13 @@
     .case-facts dd { margin: 0; color: #c1ccce; font-size: 13px; line-height: 1.7; }
     .case-dialog-links { display: flex; flex-wrap: wrap; gap: 20px; font: 10px var(--mono); }
     .case-dialog-links a { color: var(--green); }
+    .case-dialog-links button { padding: 0; border: 0; background: none; color: var(--green); cursor: pointer; font: inherit; }
+    .case-share-status { color: #b7c8cd; font: 10px var(--mono); overflow-wrap: anywhere; }
+    .case-share-status:empty { display: none; }
+    .case-preview { margin: 18px 0; }
+    .case-preview img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
+    .case-preview img[hidden] { display: none; }
+    .case-preview figcaption { margin-top: 7px; color: #a4b3b8; font: 10px var(--mono); line-height: 1.5; }
 
     .command-palette { width: min(590px, calc(100% - 28px)); max-height: min(78svh, 650px); padding: 0; overflow: hidden; border: 1px solid rgba(71,184,255,.38); background: linear-gradient(145deg,#0c171e,#05090d 76%); color: var(--white); box-shadow: 0 30px 110px rgba(0,0,0,.72),0 0 55px rgba(71,184,255,.08); }
     .command-palette::backdrop { background: rgba(0,5,9,.78); backdrop-filter: blur(10px); }
@@ -694,7 +714,7 @@
       .contact-box { align-items: flex-start; flex-direction: column; }
       .terminal-section { padding: 80px 0; }
       .footer-inner { gap: 14px; flex-wrap: wrap; padding: 20px 0; }
-      .prompt-form textarea, .prompt-form select, .contact-form input, .contact-form textarea, .command-search { font-size: 16px; }
+      .prompt-form textarea, .prompt-form select, .contact-form input, .contact-form textarea, .command-search, .project-search input { font-size: 16px; }
     }
     @media (pointer: coarse) {
       .nav-links a, .command-trigger, .terminal-suggestions button, .cloud-toggle { min-height: 44px; }
@@ -736,8 +756,13 @@
     .performance-lite .project-visual::before, .performance-lite .terminal-shell::after,
     .performance-lite .contact::after, .performance-lite .local-signal::before,
     .performance-lite .activity-refresh-icon { animation: none; }
+    .user-reduced-motion *, .user-reduced-motion *::before, .user-reduced-motion *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+    .user-reduced-motion [data-reveal] { opacity: 1; transform: none; }
+    .user-high-contrast { --muted: #c7d7da; --line: rgba(215,240,244,.4); }
+    .user-high-contrast .section-note, .user-high-contrast .hero-copy, .user-high-contrast .project-description, .user-high-contrast .lab-panel p { color: #e2eeee; }
+    .user-large-text .hero-copy, .user-large-text .project-description, .user-large-text .section-note, .user-large-text .about-copy p, .user-large-text .lab-panel p, .user-large-text .journey-item p, .user-large-text .learning-note p, .user-large-text .contact-caption { font-size: 16px; }
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
       [data-reveal] { opacity: 1; transform: none; }
       .journey-item, .learning-note { transition-delay: 0s !important; }
       .command-palette[open] .command-item { animation-delay: 0s !important; }
@@ -877,6 +902,7 @@
       </div>
       <div class="shell hero-content">
         <div class="hero-topline">CSE + AI / WEB + APP DEVELOPMENT</div>
+        <p class="hero-welcome" id="hero-welcome">WELCOME TO THE PORTFOLIO</p>
         <h1>BUILDING<br><span class="outline">WHAT'S</span><br><span class="accent">NEXT.</span></h1>
         <div class="hero-bottom">
           <div class="hero-copy">
@@ -910,6 +936,7 @@
                 <span class="cloud-toggle-label">CLOUDS / ON</span>
               </button>
             </div>
+            <button class="cloud-toggle" id="earth-facts-trigger" type="button" aria-haspopup="dialog" aria-controls="earth-facts-dialog">EXPLORE EARTH ↗</button>
           </div>
         </div>
       </div>
@@ -919,6 +946,21 @@
         <div class="local-signal">YOUR LOCAL TIME / <time id="local-time"></time></div>
       </div>
     </section>
+
+    <dialog class="case-dialog" id="earth-facts-dialog" aria-labelledby="earth-facts-title">
+      <div class="case-dialog-inner">
+        <button class="case-dialog-close" id="earth-facts-close" type="button" aria-label="Close Earth facts">×</button>
+        <div class="eyebrow">SOL III / PLANET PROFILE</div>
+        <h2 id="earth-facts-title">Earth.</h2>
+        <p class="case-summary">Our home planet orbits the Sun and has one natural moon.</p>
+        <dl class="case-facts">
+          <div><dt>Axial tilt</dt><dd>Approximately 23.5 degrees.</dd></div>
+          <div><dt>Orbital period</dt><dd>Approximately 365.25 days.</dd></div>
+          <div><dt>Surface</dt><dd>About 71% is covered by water.</dd></div>
+        </dl>
+        <p class="case-summary">The portfolio orbit is a visual illustration, not a real-time simulation.</p>
+      </div>
+    </dialog>
 
     <div class="focus-marquee" role="img" aria-label="Focus areas: Web and Application Development and Artificial Intelligence">
       <div class="marquee-track" aria-hidden="true">
@@ -941,6 +983,9 @@
           <button type="button" data-project-filter="web" aria-pressed="false">Web &amp; app development</button>
           <button type="button" data-project-filter="ai" aria-pressed="false">Artificial intelligence</button>
         </div>
+        <label class="project-search" for="project-search">SEARCH PROJECTS
+          <input id="project-search" type="search" autocomplete="off" placeholder="Search by project or focus">
+        </label>
         <p class="project-count" id="project-count" role="status" aria-live="polite">Showing 3 projects</p>
         <div class="project-grid" data-filter="all">
           <article class="project-card" id="project-kisaan" data-project-category="web ai" data-reveal>
@@ -1020,17 +1065,25 @@
         <div class="eyebrow">PROJECT CASE FILE</div>
         <h2 id="case-title"></h2>
         <p class="case-summary" id="case-summary"></p>
+        <figure class="case-preview" id="case-preview" hidden>
+          <img id="case-preview-image" alt="Screenshot of the Kisaan Sathi home page" width="960" height="540" loading="lazy" decoding="async">
+          <figcaption id="case-preview-caption">Kisaan Sathi website preview.</figcaption>
+        </figure>
         <dl class="case-facts">
           <div><dt>Highlights</dt><dd id="case-highlights"></dd></div>
           <div id="case-stack-row" hidden><dt>Repository languages</dt><dd id="case-stack"></dd></div>
           <div><dt>Focus</dt><dd id="case-focus"></dd></div>
           <div><dt>Contribution</dt><dd id="case-contribution"></dd></div>
+          <div><dt>Project status</dt><dd id="case-project-status"></dd></div>
         </dl>
         <div class="case-dialog-links">
           <a id="case-live-link" href="https://kissansathiindia.vercel.app/" target="_blank" rel="noreferrer">OPEN LIVE PROJECT ↗</a>
           <a id="case-repo-link" href="https://github.com/DilshajAshrafi" target="_blank" rel="noreferrer">OPEN SOURCE REPOSITORY ↗</a>
           <a href="https://github.com/DilshajAshrafi" target="_blank" rel="noreferrer">MORE ON GITHUB ↗</a>
+          <button id="case-share" type="button">COPY CASE LINK ↗</button>
+          <button id="case-download" type="button">DOWNLOAD SUMMARY ↓</button>
         </div>
+        <p class="case-share-status" id="case-share-status" role="status" aria-live="polite"></p>
       </div>
     </dialog>
 
@@ -1174,6 +1227,39 @@
             <ul class="activity-list" id="github-activity" aria-label="Recent public GitHub activity"></ul>
             <button class="activity-refresh" id="github-activity-refresh" type="button">REFRESH ACTIVITY <span class="activity-refresh-icon" aria-hidden="true">↻</span></button>
             <a class="activity-profile" href="https://github.com/DilshajAshrafi" target="_blank" rel="noreferrer">OPEN GITHUB PROFILE ↗</a>
+            <a class="activity-profile" href="https://github.com/DilshajAshrafi?tab=repositories" target="_blank" rel="noreferrer">BROWSE REPOSITORIES ↗</a>
+          </article>
+
+          <article class="lab-panel" data-reveal aria-labelledby="contrast-check-title">
+            <div class="lab-kicker">INTERACTIVE TOOL / RUNS LOCALLY</div>
+            <h3 id="contrast-check-title">Check color contrast.</h3>
+            <p>Choose two colors to check their contrast for readable text. Nothing is sent to a server.</p>
+            <div class="prompt-form">
+              <label for="contrast-foreground">Text color <input id="contrast-foreground" type="color" value="#eef7f7"></label>
+              <label for="contrast-background">Background color <input id="contrast-background" type="color" value="#05090d"></label>
+              <p id="contrast-result" role="status" aria-live="polite"></p>
+            </div>
+          </article>
+
+          <article class="lab-panel" data-reveal aria-labelledby="preferences-title">
+            <div class="lab-kicker">PERSONALIZE / LOCAL SETTINGS</div>
+            <h3 id="preferences-title">Your experience.</h3>
+            <p>These settings stay on this device. Your system's reduced-motion preference is always respected.</p>
+            <div class="prompt-form">
+              <label for="motion-quality">Animation quality
+                <select id="motion-quality">
+                  <option value="auto">Automatic</option>
+                  <option value="light">Lightweight / reduced motion</option>
+                  <option value="high">High detail</option>
+                </select>
+              </label>
+              <label for="text-size">Text size
+                <select id="text-size"><option value="normal">Standard</option><option value="large">Larger text</option></select>
+              </label>
+              <label for="contrast-mode">Contrast
+                <select id="contrast-mode"><option value="normal">Standard</option><option value="high">Higher contrast</option></select>
+              </label>
+            </div>
           </article>
 
           <section class="lab-panel learning-journal" data-reveal aria-labelledby="learning-journal-title">
@@ -1214,13 +1300,15 @@
             <a href="https://github.com/DilshajAshrafi" target="_blank" rel="noreferrer">GITHUB ↗</a>
             <a href="https://www.instagram.com/dilshaj_ashrafi2/" target="_blank" rel="noreferrer">INSTAGRAM ↗</a>
             <a href="resume.html">RESUME ↗</a>
+            <a href="resume.pdf" download>DOWNLOAD CV ↗</a>
           </div>
-          <form class="contact-form" id="contact-form">
+          <form class="contact-form" id="contact-form" action="https://formsubmit.co/dilshajashrafi@gmail.com" method="POST">
+            <input type="hidden" name="_subject" value="New portfolio message">
             <label for="contact-name">Your name<input id="contact-name" name="name" autocomplete="name" required></label>
             <label for="contact-email">Your email<input id="contact-email" name="email" type="email" autocomplete="email" required></label>
             <label for="contact-message">Message<textarea id="contact-message" name="message" required></textarea></label>
-            <button class="button" type="submit">PREPARE EMAIL <span class="button-arrow">↗</span></button>
-            <p class="form-note">Your email app will open with the message ready. It is sent only after you press Send there.</p>
+            <button class="button" type="submit">SEND MESSAGE <span class="button-arrow">↗</span></button>
+            <p class="form-note">Your message is sent through FormSubmit. Please do not include sensitive information.</p>
             <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
           </form>
         </div>
@@ -1237,6 +1325,7 @@
     <div class="shell footer-inner">
       <span>© 2026 DILSHAJ ASHRAFI</span>
       <span>CSE + AI / WEB + APP DEVELOPMENT</span>
+      <span id="network-status" role="status" aria-live="polite"></span>
       <button class="install-app" id="install-app" type="button" hidden>INSTALL APP</button>
       <a class="back-top" href="#top">BACK TO TOP ↑</a>
     </div>
@@ -1247,11 +1336,26 @@
     const context = canvas.getContext("2d");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const dataSaver = Boolean(navigator.connection && navigator.connection.saveData);
-    let performanceLite = window.matchMedia("(pointer: coarse)").matches
+    const hardwareLite = window.matchMedia("(pointer: coarse)").matches
       || dataSaver
       || (navigator.hardwareConcurrency > 0 && navigator.hardwareConcurrency <= 4)
       || (navigator.deviceMemory > 0 && navigator.deviceMemory <= 4);
+    const experienceKey = "dilshaj-portfolio-experience";
+    let experience = { motion: "auto", text: "normal", contrast: "normal" };
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(experienceKey) || "{}");
+      if (["auto", "light", "high"].includes(saved.motion)) experience.motion = saved.motion;
+      if (["normal", "large"].includes(saved.text)) experience.text = saved.text;
+      if (["normal", "high"].includes(saved.contrast)) experience.contrast = saved.contrast;
+    } catch (error) {
+      console.warn("Experience settings could not be read:", error);
+    }
+    let performanceLite = experience.motion === "light" || (experience.motion === "auto" && hardwareLite);
+    let motionLimited = prefersReducedMotion || experience.motion === "light";
     document.documentElement.classList.toggle("performance-lite", performanceLite);
+    document.documentElement.classList.toggle("user-reduced-motion", experience.motion === "light");
+    document.documentElement.classList.toggle("user-large-text", experience.text === "large");
+    document.documentElement.classList.toggle("user-high-contrast", experience.contrast === "high");
     const cloudToggle = document.querySelector("#cloud-toggle");
     const cloudToggleLabel = cloudToggle.querySelector(".cloud-toggle-label");
     const orbitalCore = document.querySelector(".orbital-core");
@@ -1460,10 +1564,11 @@
       });
       updateFullscreenControl();
     }
-    if (prefersReducedMotion) {
+    if (motionLimited) {
       cloudToggle.disabled = true;
       cloudToggle.setAttribute("aria-pressed", "false");
       cloudToggleLabel.textContent = "CLOUDS / STATIC";
+      orbitalCore.classList.add("clouds-paused");
     }
     cloudToggle.addEventListener("click", () => {
       const cloudsActive = cloudToggle.getAttribute("aria-pressed") !== "true";
@@ -1471,13 +1576,23 @@
       orbitalCore.classList.toggle("clouds-paused", !cloudsActive);
       cloudToggleLabel.textContent = cloudsActive ? "CLOUDS / ON" : "CLOUDS / PAUSED";
     });
+    const earthFactsDialog = document.querySelector("#earth-facts-dialog");
+    document.querySelector("#earth-facts-trigger").addEventListener("click", () => earthFactsDialog.showModal());
+    document.querySelector("#earth-facts-close").addEventListener("click", () => earthFactsDialog.close());
     const localTime = document.querySelector("#local-time");
+    const heroWelcome = document.querySelector("#hero-welcome");
+    const clockHero = document.querySelector(".hero");
     const localTimeFormat = new Intl.DateTimeFormat(undefined, { hour: "2-digit", minute: "2-digit" });
     let localClockTimer = 0;
     function updateLocalClock() {
       const now = new Date();
       localTime.dateTime = now.toISOString();
       localTime.textContent = localTimeFormat.format(now);
+      const hour = now.getHours();
+      const greeting = hour < 12 && hour >= 5 ? "GOOD MORNING" : hour < 18 && hour >= 12 ? "GOOD AFTERNOON" : "GOOD EVENING";
+      heroWelcome.textContent = `${greeting} / WELCOME ABOARD`;
+      clockHero.dataset.dayPhase = hour >= 5 && hour < 12 ? "morning" : hour >= 18 || hour < 5 ? "evening" : "afternoon";
+      clockHero.dataset.skyCycle = String(Math.floor(now.getMonth() / 3));
     }
     function syncLocalClock() {
       window.clearTimeout(localClockTimer);
@@ -1518,7 +1633,7 @@
         speed: Math.random() * .018 + .005,
         tint: Math.random() > .83 ? "blue" : "white"
       }));
-      meteors = prefersReducedMotion ? [] : Array.from({ length: performanceLite ? 1 : 3 }, () => ({
+      meteors = motionLimited ? [] : Array.from({ length: performanceLite ? 1 : 3 }, () => ({
         active: false,
         wait: 700 + Math.random() * 2400
       }));
@@ -1583,7 +1698,7 @@
 
     function animateStars(time) {
       animationFrame = 0;
-      if (!heroVisible || document.hidden || prefersReducedMotion) return;
+      if (!heroVisible || document.hidden || motionLimited) return;
       if (!performanceLite && lastAnimationTick) {
         const interval = time - lastAnimationTick;
         if (interval > 1000) {
@@ -1610,7 +1725,7 @@
 
     function updateStarfieldPlayback() {
       syncLocalClock();
-      if (heroVisible && !document.hidden && !prefersReducedMotion) {
+      if (heroVisible && !document.hidden && !motionLimited) {
         if (!animationFrame) animationFrame = requestAnimationFrame(animateStars);
       } else {
         cancelAnimationFrame(animationFrame);
@@ -1623,7 +1738,7 @@
     }
 
     function enablePerformanceLite() {
-      if (performanceLite) return;
+      if (performanceLite || experience.motion === "high") return;
       performanceLite = true;
       document.documentElement.classList.add("performance-lite");
       if (longTaskObserver) longTaskObserver.disconnect();
@@ -1666,6 +1781,47 @@
     motionObserver.observe(canvas.parentElement);
     document.querySelectorAll(".project-card, .focus-marquee, #terminal, #about, #labs, #contact")
       .forEach((element) => motionObserver.observe(element));
+
+    const motionQualityControl = document.querySelector("#motion-quality");
+    const textSizeControl = document.querySelector("#text-size");
+    const contrastControl = document.querySelector("#contrast-mode");
+    motionQualityControl.value = experience.motion;
+    textSizeControl.value = experience.text;
+    contrastControl.value = experience.contrast;
+    function saveExperience() {
+      try {
+        window.localStorage.setItem(experienceKey, JSON.stringify(experience));
+      } catch (error) {
+        console.warn("Experience settings could not be saved:", error);
+      }
+    }
+    motionQualityControl.addEventListener("change", () => {
+      experience.motion = motionQualityControl.value;
+      motionLimited = prefersReducedMotion || experience.motion === "light";
+      performanceLite = experience.motion === "light" || (experience.motion === "auto" && hardwareLite);
+      document.documentElement.classList.toggle("performance-lite", performanceLite);
+      document.documentElement.classList.toggle("user-reduced-motion", experience.motion === "light");
+      cloudToggle.disabled = motionLimited;
+      if (motionLimited) {
+        cloudToggle.setAttribute("aria-pressed", "false");
+        orbitalCore.classList.add("clouds-paused");
+      }
+      cloudToggleLabel.textContent = motionLimited ? "CLOUDS / STATIC"
+        : cloudToggle.getAttribute("aria-pressed") === "true" ? "CLOUDS / ON" : "CLOUDS / PAUSED";
+      resizeCanvas(true);
+      updateStarfieldPlayback();
+      saveExperience();
+    });
+    textSizeControl.addEventListener("change", () => {
+      experience.text = textSizeControl.value;
+      document.documentElement.classList.toggle("user-large-text", experience.text === "large");
+      saveExperience();
+    });
+    contrastControl.addEventListener("change", () => {
+      experience.contrast = contrastControl.value;
+      document.documentElement.classList.toggle("user-high-contrast", experience.contrast === "high");
+      saveExperience();
+    });
 
     const scrollProgressBar = document.querySelector("#scroll-progress-bar");
     const siteHeader = document.querySelector(".site-header");
@@ -1814,16 +1970,16 @@
     updateCommandResults();
 
     const supportsPointerEffects = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (supportsPointerEffects && !prefersReducedMotion && !performanceLite) {
+    if (supportsPointerEffects && !prefersReducedMotion) {
       let ambientPointer = null;
       let ambientPointerFrame = 0;
       document.addEventListener("pointermove", (event) => {
-        if (performanceLite) return;
+        if (performanceLite || motionLimited) return;
         ambientPointer = { x: event.clientX, y: event.clientY };
         if (ambientPointerFrame) return;
         ambientPointerFrame = requestAnimationFrame(() => {
           ambientPointerFrame = 0;
-          if (!ambientPointer || performanceLite) return;
+          if (!ambientPointer || performanceLite || motionLimited) return;
           document.body.style.setProperty("--ambient-x", `${ambientPointer.x}px`);
           document.body.style.setProperty("--ambient-y", `${ambientPointer.y}px`);
         });
@@ -1836,12 +1992,12 @@
       let heroPointerFrame = 0;
 
       hero.addEventListener("pointermove", (event) => {
-        if (performanceLite) return;
+        if (performanceLite || motionLimited) return;
         heroPointer = { x: event.clientX, y: event.clientY };
         if (heroPointerFrame) return;
         heroPointerFrame = requestAnimationFrame(() => {
           heroPointerFrame = 0;
-          if (!heroPointer || performanceLite) return;
+          if (!heroPointer || performanceLite || motionLimited) return;
           const bounds = hero.getBoundingClientRect();
           const x = (heroPointer.x - bounds.left) / bounds.width;
           const y = (heroPointer.y - bounds.top) / bounds.height;
@@ -1867,7 +2023,7 @@
 
       document.querySelectorAll(".project-card, .lab-panel, .stat, .journey-item, .learning-note").forEach((card) => {
         card.addEventListener("pointermove", (event) => {
-          if (performanceLite) return;
+          if (performanceLite || motionLimited) return;
           const bounds = card.getBoundingClientRect();
           const x = event.clientX - bounds.left;
           const y = event.clientY - bounds.top;
@@ -1899,31 +2055,46 @@
     const projectCards = [...document.querySelectorAll(".project-card[data-project-category]")];
     const projectFilterButtons = [...document.querySelectorAll("[data-project-filter]")];
     const projectCount = document.querySelector("#project-count");
+    const projectSearch = document.querySelector("#project-search");
     projectCards.forEach((card) => {
       card.addEventListener("animationend", (event) => {
         if (event.animationName === "project-filter-arrive") card.classList.remove("filter-arrive");
       });
     });
-    projectFilterButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const filter = button.dataset.projectFilter;
-        projectGrid.dataset.filter = filter;
-        for (const filterButton of projectFilterButtons) {
-          filterButton.setAttribute("aria-pressed", String(filterButton === button));
-        }
-        for (const card of projectCards) {
-          const categories = card.dataset.projectCategory.split(/\s+/);
-          const shouldShow = filter === "all" || categories.includes(filter);
-          card.hidden = !shouldShow;
-          if (shouldShow) {
-            card.classList.add("visible");
+    function updateProjectFilter(animate) {
+      const filter = projectGrid.dataset.filter;
+      const query = projectSearch.value.trim().toLowerCase();
+      for (const card of projectCards) {
+        const categories = card.dataset.projectCategory.split(/\s+/);
+        const shouldShow = (filter === "all" || categories.includes(filter))
+          && card.textContent.toLowerCase().includes(query);
+        card.hidden = !shouldShow;
+        if (shouldShow) {
+          card.classList.add("visible");
+          if (animate) {
             card.classList.remove("filter-arrive");
             void card.offsetWidth;
             card.classList.add("filter-arrive");
           }
         }
-        const visibleCount = projectCards.filter((card) => !card.hidden).length;
-        projectCount.textContent = `Showing ${visibleCount} ${visibleCount === 1 ? "project" : "projects"}`;
+      }
+      const visibleCount = projectCards.filter((card) => !card.hidden).length;
+      projectCount.textContent = `Showing ${visibleCount} ${visibleCount === 1 ? "project" : "projects"}`;
+    }
+    projectSearch.addEventListener("input", () => updateProjectFilter(false));
+    projectFilterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        projectGrid.dataset.filter = button.dataset.projectFilter;
+        for (const filterButton of projectFilterButtons) {
+          filterButton.setAttribute("aria-pressed", String(filterButton === button));
+        }
+        updateProjectFilter(true);
+      });
+    });
+    document.querySelectorAll('.skill-list .skill[href^="#project-"]').forEach((link) => {
+      link.addEventListener("click", () => {
+        projectSearch.value = "";
+        projectFilterButtons[0].click();
       });
     });
 
@@ -1948,6 +2119,28 @@
       ].join("\n");
       promptResult.hidden = false;
     });
+
+    const contrastForeground = document.querySelector("#contrast-foreground");
+    const contrastBackground = document.querySelector("#contrast-background");
+    const contrastResult = document.querySelector("#contrast-result");
+    function colorLuminance(color) {
+      const channels = [1, 3, 5].map((index) => {
+        const channel = parseInt(color.slice(index, index + 2), 16) / 255;
+        return channel <= .04045 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4;
+      });
+      return .2126 * channels[0] + .7152 * channels[1] + .0722 * channels[2];
+    }
+    function updateContrastResult() {
+      const first = colorLuminance(contrastForeground.value);
+      const second = colorLuminance(contrastBackground.value);
+      const ratio = (Math.max(first, second) + .05) / (Math.min(first, second) + .05);
+      const result = ratio >= 4.5 ? "Passes WCAG AA for normal text."
+        : ratio >= 3 ? "Passes WCAG AA for large text only." : "Does not pass WCAG AA for text.";
+      contrastResult.textContent = `${ratio.toFixed(2)}:1 · ${result}`;
+    }
+    contrastForeground.addEventListener("input", updateContrastResult);
+    contrastBackground.addEventListener("input", updateContrastResult);
+    updateContrastResult();
 
     const githubActivity = document.querySelector("#github-activity");
     const githubActivityStatus = document.querySelector("#github-activity-status");
@@ -2137,26 +2330,88 @@
     const caseDialog = document.querySelector("#case-dialog");
     const liveProjectLink = document.querySelector("#case-live-link");
     const repositoryLink = document.querySelector("#case-repo-link");
-    document.querySelectorAll("[data-case]").forEach((button) => {
-      button.addEventListener("click", () => {
-        const project = projectCases[button.dataset.case];
-        if (!project) return;
-        document.querySelector("#case-title").textContent = project.title;
-        document.querySelector("#case-summary").textContent = project.summary;
-        document.querySelector("#case-highlights").textContent = project.highlights;
-        const caseStackRow = document.querySelector("#case-stack-row");
-        caseStackRow.hidden = !project.stack;
-        if (project.stack) document.querySelector("#case-stack").textContent = project.stack;
-        document.querySelector("#case-focus").textContent = project.focus;
-        document.querySelector("#case-contribution").textContent = project.contribution;
-        liveProjectLink.hidden = !project.url;
-        repositoryLink.hidden = !project.repo;
-        if (project.url) liveProjectLink.href = project.url;
-        if (project.repo) repositoryLink.href = project.repo;
-        caseDialog.showModal();
-      });
+    const caseShareStatus = document.querySelector("#case-share-status");
+    const casePreview = document.querySelector("#case-preview");
+    const casePreviewImage = document.querySelector("#case-preview-image");
+    const casePreviewCaption = document.querySelector("#case-preview-caption");
+    casePreviewImage.addEventListener("error", () => {
+      casePreviewImage.hidden = true;
+      casePreviewCaption.textContent = "The project preview could not be loaded.";
     });
-    document.querySelector(".case-dialog-close").addEventListener("click", () => caseDialog.close());
+    let currentCaseKey = "";
+    function openProjectCase(key) {
+      if (!Object.prototype.hasOwnProperty.call(projectCases, key)) return;
+      const project = projectCases[key];
+      currentCaseKey = key;
+      caseShareStatus.textContent = "";
+      casePreview.hidden = key !== "kisaan";
+      if (key === "kisaan") {
+        casePreviewImage.hidden = false;
+        casePreviewCaption.textContent = "Kisaan Sathi website preview.";
+        casePreviewImage.src = "assets/kisaan-preview.jpg";
+      }
+      document.querySelector("#case-title").textContent = project.title;
+      document.querySelector("#case-summary").textContent = project.summary;
+      document.querySelector("#case-highlights").textContent = project.highlights;
+      const caseStackRow = document.querySelector("#case-stack-row");
+      caseStackRow.hidden = !project.stack;
+      if (project.stack) document.querySelector("#case-stack").textContent = project.stack;
+      document.querySelector("#case-focus").textContent = project.focus;
+      document.querySelector("#case-contribution").textContent = project.contribution;
+      document.querySelector("#case-project-status").textContent = project.status || "Not specified.";
+      liveProjectLink.hidden = !project.url;
+      repositoryLink.hidden = !project.repo;
+      if (project.url) liveProjectLink.href = project.url;
+      if (project.repo) repositoryLink.href = project.repo;
+      if (!caseDialog.open) caseDialog.showModal();
+    }
+    document.querySelectorAll("[data-case]").forEach((button) => {
+      button.addEventListener("click", () => openProjectCase(button.dataset.case));
+    });
+    caseDialog.querySelector(".case-dialog-close").addEventListener("click", () => caseDialog.close());
+    function openCaseFromHash() {
+      if (entryScreen.open || !window.location.hash.startsWith("#case-")) return;
+      openProjectCase(window.location.hash.slice(6));
+    }
+    window.addEventListener("hashchange", openCaseFromHash);
+    entryScreen.addEventListener("close", openCaseFromHash);
+    openCaseFromHash();
+    document.querySelector("#case-share").addEventListener("click", async () => {
+      const link = new URL(window.location.href);
+      link.hash = `case-${currentCaseKey}`;
+      caseShareStatus.textContent = "Copying case link...";
+      try {
+        if (!navigator.clipboard) throw new Error("Clipboard unavailable");
+        await navigator.clipboard.writeText(link.href);
+        caseShareStatus.textContent = "Case link copied.";
+      } catch {
+        caseShareStatus.textContent = `Copy this link: ${link.href}`;
+      }
+    });
+    document.querySelector("#case-download").addEventListener("click", () => {
+      const project = projectCases[currentCaseKey];
+      const summary = [
+        project.title, "", project.summary, "", `Highlights: ${project.highlights}`,
+        project.stack ? `Repository languages: ${project.stack}` : null,
+        `Focus: ${project.focus}`, `Contribution: ${project.contribution}`,
+        `Project status: ${project.status || "Not specified."}`,
+        project.url ? `Live project: ${project.url}` : null,
+        project.repo ? `Source: ${project.repo}` : null
+      ].filter((line) => line !== null).join("\n");
+      try {
+        const url = URL.createObjectURL(new Blob([summary], { type: "text/plain;charset=utf-8" }));
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${currentCaseKey}-summary.txt`;
+        document.body.append(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      } catch (error) {
+        caseShareStatus.textContent = "The summary could not be downloaded in this browser.";
+        console.error("Project summary download failed:", error);
+      }
+    });
 
     const terminalForm = document.querySelector("#terminal-form");
     const terminalOutput = document.querySelector("#terminal-output");
@@ -2202,16 +2457,20 @@
 
     const contactForm = document.querySelector("#contact-form");
     contactForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const formData = new FormData(contactForm);
-      const name = formData.get("name").toString().trim();
-      const email = formData.get("email").toString().trim();
-      const message = formData.get("message").toString().trim();
-      const subject = encodeURIComponent(`Portfolio message from ${name}`);
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
-      document.querySelector("#form-status").textContent = "Opening your email app. Review the draft there, then press Send.";
-      window.location.href = `mailto:dilshajashrafi@gmail.com?subject=${subject}&body=${body}`;
+      if (!navigator.onLine) {
+        event.preventDefault();
+        document.querySelector("#form-status").textContent = "You are offline. Reconnect before sending your message.";
+        return;
+      }
+      document.querySelector("#form-status").textContent = "Opening FormSubmit to send your message.";
     });
+    const networkStatus = document.querySelector("#network-status");
+    function updateNetworkStatus() {
+      networkStatus.textContent = navigator.onLine ? "NETWORK / ONLINE · CONNECTION NOT VERIFIED" : "NETWORK / OFFLINE · CACHED PAGES MAY BE AVAILABLE";
+    }
+    window.addEventListener("online", updateNetworkStatus);
+    window.addEventListener("offline", updateNetworkStatus);
+    updateNetworkStatus();
 
     const installAppButton = document.querySelector("#install-app");
     let installPromptEvent = null;

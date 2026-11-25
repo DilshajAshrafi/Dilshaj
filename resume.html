@@ -13,7 +13,7 @@
     * { box-sizing:border-box; }
     body { margin:0; background:#05090d; color:var(--text); font:14px/1.65 "Segoe UI",Arial,sans-serif; }
     a { color:inherit; }
-    .toolbar { width:min(900px,calc(100% - 40px)); margin:24px auto; display:flex; justify-content:space-between; align-items:center; gap:16px; }
+    .toolbar { width:min(900px,calc(100% - 40px)); margin:24px auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
     .toolbar a { color:var(--green); text-decoration:none; font-size:12px; }
     .toolbar button { padding:11px 16px; border:0; background:var(--green); color:#07100b; font-weight:700; cursor:pointer; }
     .resume { width:min(900px,calc(100% - 40px)); margin:0 auto 50px; padding:clamp(25px,6vw,58px); border:1px solid var(--line); background:linear-gradient(145deg,#0b141a,#080d11 70%); }
@@ -60,6 +60,7 @@
 <body>
   <div class="toolbar">
     <a href="index.html">← BACK TO PORTFOLIO</a>
+    <a href="resume.pdf" download>DOWNLOAD PDF ↓</a>
     <button type="button" onclick="window.print()">PRINT / SAVE AS PDF</button>
   </div>
   <main class="resume">

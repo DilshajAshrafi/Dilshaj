@@ -42,10 +42,12 @@ function createScene() {
     hidden: false,
     documentElement: { classList: { add() {} } },
     addEventListener() {},
+    querySelector: () => ({ value: "", addEventListener() {} }),
     querySelectorAll: () => [],
   };
   const scene = vm.createContext({
     canvas, context: drawing, document, performanceLite: false, prefersReducedMotion: false,
+    motionLimited: false, experience: { motion: "auto", text: "normal", contrast: "normal" },
     window: { devicePixelRatio: 1, PerformanceObserver, addEventListener() {} },
     PerformanceObserver, IntersectionObserver,
     syncLocalClock() {},
