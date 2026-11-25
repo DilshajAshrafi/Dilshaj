@@ -1230,7 +1230,7 @@
     const context = canvas.getContext("2d");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const dataSaver = Boolean(navigator.connection && navigator.connection.saveData);
-    const performanceLite = window.matchMedia("(pointer: coarse)").matches
+    let performanceLite = window.matchMedia("(pointer: coarse)").matches
       || dataSaver
       || (navigator.hardwareConcurrency > 0 && navigator.hardwareConcurrency <= 4)
       || (navigator.deviceMemory > 0 && navigator.deviceMemory <= 4);
@@ -1458,17 +1458,21 @@
     let meteors = [];
     let animationFrame = 0;
     let lastFrameTime = 0;
+    let lastAnimationTick = 0;
+    let sampledFrames = 0;
+    let slowFrames = 0;
     let canvasBounds = { width: 0, height: 0 };
     let heroVisible = false;
+    let longTaskObserver;
 
-    function resizeCanvas() {
+    function resizeCanvas(force = false) {
       const bounds = canvas.getBoundingClientRect();
       const maxPixels = performanceLite ? 750000 : 2000000;
       const ratio = Math.min(
         performanceLite ? 1 : Math.min(window.devicePixelRatio || 1, 1.5),
         Math.sqrt(maxPixels / Math.max(1, bounds.width * bounds.height))
       );
-      if (canvasBounds.width === bounds.width && canvasBounds.height === bounds.height
+      if (!force && canvasBounds.width === bounds.width && canvasBounds.height === bounds.height
           && canvas.width === Math.floor(bounds.width * ratio) && canvas.height === Math.floor(bounds.height * ratio)) return;
       canvasBounds = { width: bounds.width, height: bounds.height };
       canvas.width = bounds.width * ratio;
@@ -1548,6 +1552,22 @@
     function animateStars(time) {
       animationFrame = 0;
       if (!heroVisible || document.hidden || prefersReducedMotion) return;
+      if (!performanceLite && lastAnimationTick) {
+        const interval = time - lastAnimationTick;
+        if (interval > 1000) {
+          sampledFrames = 0;
+          slowFrames = 0;
+        } else {
+          sampledFrames++;
+          if (interval > 40) slowFrames++;
+          if (sampledFrames >= 90) {
+            if (slowFrames >= 45) enablePerformanceLite();
+            sampledFrames = 0;
+            slowFrames = 0;
+          }
+        }
+      }
+      lastAnimationTick = time;
       if (!lastFrameTime || time - lastFrameTime >= 1000 / (performanceLite ? 20 : 30) - 2) {
         const delta = lastFrameTime ? Math.min(time - lastFrameTime, 100) : 0;
         lastFrameTime = time;
@@ -1563,12 +1583,44 @@
         cancelAnimationFrame(animationFrame);
         animationFrame = 0;
         lastFrameTime = 0;
+        lastAnimationTick = 0;
+        sampledFrames = 0;
+        slowFrames = 0;
       }
     }
 
+    function enablePerformanceLite() {
+      if (performanceLite) return;
+      performanceLite = true;
+      document.documentElement.classList.add("performance-lite");
+      if (longTaskObserver) longTaskObserver.disconnect();
+      resizeCanvas(true);
+    }
+
     resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("resize", () => resizeCanvas());
     document.addEventListener("visibilitychange", updateStarfieldPlayback);
+    if (!performanceLite && "PerformanceObserver" in window
+        && Array.isArray(PerformanceObserver.supportedEntryTypes)
+        && PerformanceObserver.supportedEntryTypes.includes("longtask")) {
+      let longTasks = [];
+      longTaskObserver = new PerformanceObserver((list) => {
+        if (document.hidden) {
+          longTasks = [];
+          return;
+        }
+        for (const entry of list.getEntries()) {
+          longTasks = longTasks.filter((time) => entry.startTime - time < 10000);
+          longTasks.push(entry.startTime);
+          if (longTasks.length >= 5) {
+            enablePerformanceLite();
+            break;
+          }
+        }
+      });
+      longTaskObserver.observe({ type: "longtask" });
+      document.addEventListener("visibilitychange", () => { longTasks = []; });
+    }
     const motionObserver = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         entry.target.classList.toggle("motion-paused", !entry.isIntersecting);
@@ -1733,11 +1785,12 @@
       let ambientPointer = null;
       let ambientPointerFrame = 0;
       document.addEventListener("pointermove", (event) => {
+        if (performanceLite) return;
         ambientPointer = { x: event.clientX, y: event.clientY };
         if (ambientPointerFrame) return;
         ambientPointerFrame = requestAnimationFrame(() => {
           ambientPointerFrame = 0;
-          if (!ambientPointer) return;
+          if (!ambientPointer || performanceLite) return;
           document.body.style.setProperty("--ambient-x", `${ambientPointer.x}px`);
           document.body.style.setProperty("--ambient-y", `${ambientPointer.y}px`);
         });
@@ -1750,11 +1803,12 @@
       let heroPointerFrame = 0;
 
       hero.addEventListener("pointermove", (event) => {
+        if (performanceLite) return;
         heroPointer = { x: event.clientX, y: event.clientY };
         if (heroPointerFrame) return;
         heroPointerFrame = requestAnimationFrame(() => {
           heroPointerFrame = 0;
-          if (!heroPointer) return;
+          if (!heroPointer || performanceLite) return;
           const bounds = hero.getBoundingClientRect();
           const x = (heroPointer.x - bounds.left) / bounds.width;
           const y = (heroPointer.y - bounds.top) / bounds.height;
@@ -1780,6 +1834,7 @@
 
       document.querySelectorAll(".project-card, .lab-panel, .stat, .journey-item, .learning-note").forEach((card) => {
         card.addEventListener("pointermove", (event) => {
+          if (performanceLite) return;
           const bounds = card.getBoundingClientRect();
           const x = event.clientX - bounds.left;
           const y = event.clientY - bounds.top;
