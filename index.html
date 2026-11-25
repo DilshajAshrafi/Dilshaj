@@ -416,7 +416,6 @@
     .prompt-form textarea, .prompt-form select { width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 3px; background: #05090d; color: var(--white); font: 12px var(--sans); }
     .prompt-form textarea { min-height: 86px; resize: vertical; }
     .prompt-form button { justify-self: start; border: 0; cursor: pointer; }
-    .prompt-disclosure { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.65; }
     .prompt-result { margin-top: 18px; padding: 16px; border: 1px solid rgba(71,184,255,.2); background: #05090d; }
     .prompt-result h4 { margin: 0 0 9px; color: var(--green); font: 9px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
     .prompt-result pre { margin: 0; color: #c1ccce; font: 11px/1.7 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -1254,7 +1253,6 @@
                 <textarea id="prompt-goal" name="goal" maxlength="240" required placeholder="Example: a project page that helps visitors compare features"></textarea>
               </label>
               <button class="button" type="submit">BUILD A PROMPT <span class="button-arrow">↗</span></button>
-              <p class="prompt-disclosure">Prototype only: this creates a prompt in your browser. No AI model is connected, and your text is not sent to a server.</p>
             </form>
             <div class="prompt-result" id="prompt-result" hidden aria-live="polite">
               <h4>Prompt preview</h4>
