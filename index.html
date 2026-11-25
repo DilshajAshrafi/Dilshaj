@@ -91,6 +91,7 @@
     .chapter-hud-progress i.active { background: linear-gradient(90deg,var(--blue),var(--green)); box-shadow: 0 0 8px rgba(71,184,255,.5); }
     .return-orbit { position: fixed; z-index: 11; right: max(20px,calc((100% - 1180px) / 2)); bottom: 22px; display: inline-flex; align-items: center; gap: 9px; padding: 8px 12px 8px 8px; border: 1px solid rgba(71,184,255,.3); border-radius: 999px; background: rgba(5,12,17,.9); color: var(--blue); box-shadow: 0 8px 28px rgba(0,0,0,.28),inset 0 0 16px rgba(71,184,255,.04); backdrop-filter: blur(12px); font: 8px var(--mono); letter-spacing: .08em; opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(12px) scale(.96); transition: opacity .25s ease,transform .3s cubic-bezier(.2,.7,.2,1),visibility 0s linear .3s,border-color .2s ease,color .2s ease,box-shadow .2s ease; }
     .return-orbit.is-visible { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1); transition: opacity .25s ease,transform .3s cubic-bezier(.2,.7,.2,1),visibility 0s,border-color .2s ease,color .2s ease,box-shadow .2s ease; }
+    .viewing-experiments .chapter-hud, .viewing-experiments .return-orbit { opacity: 0; visibility: hidden; pointer-events: none; }
     .return-orbit:hover { border-color: var(--green); color: var(--green); box-shadow: 0 8px 32px rgba(0,0,0,.32),0 0 22px rgba(71,184,255,.12); }
     .return-orbit-mark { position: relative; display: grid; width: 22px; height: 22px; place-items: center; border: 1px solid rgba(71,184,255,.42); border-radius: 50%; font-size: 11px; line-height: 1; }
     .return-orbit.is-visible .return-orbit-mark::after { position: absolute; inset: -4px; border: 1px dotted rgba(183,250,99,.52); border-radius: 50%; content: ""; animation: return-orbit-spin 8s linear infinite; }
@@ -167,6 +168,8 @@
     .hero-topline { display: flex; align-items: center; gap: 14px; color: #9cabb0; font: 10px var(--mono); letter-spacing: .14em; animation: rise-in .8s .08s both; }
     .hero-topline::before { content: ""; width: 30px; height: 1px; background: var(--green); }
     .hero-welcome { margin: 10px 0 0; color: #a7bbc0; font: 10px var(--mono); letter-spacing: .06em; }
+    .hero-guide { margin: 8px 0 0; color: #b7c8cd; font: 10px/1.6 var(--mono); }
+    .hero-guide a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
     h1 { margin: 22px 0 18px; max-width: 760px; font-size: clamp(62px, 9.5vw, 128px); line-height: .91; letter-spacing: -.085em; font-weight: 600; animation: rise-in .9s .18s both; }
     h1 .outline { color: transparent; -webkit-text-stroke: 1px rgba(238,247,247,.7); background: linear-gradient(110deg,transparent 20%,rgba(71,184,255,.18) 43%,rgba(183,250,99,.42) 50%,transparent 60%); background-size: 240% 100%; background-position: 130% 0; -webkit-background-clip: text; background-clip: text; transition: background-position .4s ease,-webkit-text-stroke-color .3s ease,text-shadow .3s ease; }
     @media (hover: hover) and (pointer: fine) {
@@ -315,6 +318,8 @@
     .section-heading h2 { margin: 15px 0 0; font-size: clamp(38px, 5vw, 62px); line-height: 1; letter-spacing: -.065em; font-weight: 600; }
     .section-heading h2::after { display: block; width: clamp(42px, 7vw, 78px); height: 1px; margin-top: 17px; content: ""; transform-origin: left; background: linear-gradient(90deg,var(--green),var(--blue),transparent); background-size: 200% 100%; box-shadow: 0 0 12px rgba(71,184,255,.28); animation: heading-signal 3.8s ease-in-out infinite alternate; }
     .section-heading[data-reveal].visible h2::after { animation: heading-signal 3.8s ease-in-out infinite alternate, section-heading-sweep 1s .12s cubic-bezier(.2,.7,.2,1) both; }
+    #work:target .section-heading, #about:target .about-layout > div:first-child, #labs:target .section-heading { animation: sector-arrive .35s ease-out both; }
+    .performance-lite #work:target .section-heading, .performance-lite #about:target .about-layout > div:first-child, .performance-lite #labs:target .section-heading { animation: none; }
     .section-note { max-width: 290px; color: #a4b3b8; font-size: 13px; line-height: 1.8; }
     .work { background: #080d11; border-top: 1px solid rgba(255,255,255,.05); }
     .project-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 24px; }
@@ -376,10 +381,13 @@
     .stat strong { display: block; color: var(--green); font-size: 24px; letter-spacing: -.06em; }
     .stat span { color: var(--muted); font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
     .skill-list { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 9px; }
-    .skill { position: relative; display: inline-flex; align-items: center; overflow: hidden; padding: 10px 13px; background: rgba(71,184,255,.055); border: 1px solid rgba(71,184,255,.13); color: #a9bdc3; font: 9px var(--mono); letter-spacing: .06em; transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, color .25s ease; }
+    .skill { position: relative; display: inline-flex; align-items: center; overflow: hidden; min-height: 44px; padding: 10px 13px; background: rgba(71,184,255,.055); border: 1px solid rgba(71,184,255,.13); color: #a9bdc3; cursor: pointer; font: 9px var(--mono); letter-spacing: .06em; transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, color .25s ease; }
+    .skill[aria-pressed="true"] { border-color: var(--green); color: var(--green); }
     .skill::before { position: absolute; inset: 0; content: ""; pointer-events: none; background: linear-gradient(110deg,transparent 25%,rgba(183,250,99,.22),transparent 75%); transform: translateX(-110%) skewX(-18deg); }
     .skill-context { margin-top: 16px; max-width: 550px; color: var(--muted); font-size: 11px; line-height: 1.8; }
     .skill-context a { color: var(--green); border-bottom: 1px solid rgba(183,250,99,.35); }
+    .skill-results { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; color: var(--green); font: 10px/1.6 var(--mono); }
+    .skill-results a { text-decoration: underline; text-underline-offset: 3px; }
     .journey { margin-top: 42px; }
     .journey h3 { margin: 0 0 18px; font-size: 18px; letter-spacing: -.03em; }
     .journey-list { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -393,12 +401,13 @@
     .journey-item span { color: var(--green); font: 8px var(--mono); letter-spacing: .12em; }
     .journey-item h4 { margin: 9px 0 6px; font-size: 12px; }
     .journey-item p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.7; }
+    .journey-item details { position: relative; z-index: 1; margin-top: 12px; color: #bdcdd0; font-size: 11px; line-height: 1.7; }
+    .journey-item summary { min-height: 36px; color: var(--green); cursor: pointer; }
+    .journey-item details a { display: inline-block; margin-top: 8px; color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
 
     .labs { background: #080d11; border-top: 1px solid var(--line); }
     .labs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .lab-panel { --pointer-x: 50%; --pointer-y: 50%; position: relative; min-width: 0; padding: clamp(20px, 3vw, 30px); border: 1px solid rgba(167,201,213,.17); border-radius: 6px; background: linear-gradient(145deg,rgba(17,32,40,.88),rgba(8,15,20,.96)); transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease; }
-    .lab-panel::before { position: absolute; top: 0; left: -75%; width: 55%; height: 1px; content: ""; opacity: 0; pointer-events: none; background: linear-gradient(90deg,transparent,var(--blue),var(--green),transparent); }
-    .lab-panel::after { position: absolute; inset: 0; content: ""; opacity: 0; pointer-events: none; background: radial-gradient(280px circle at var(--pointer-x) var(--pointer-y),rgba(71,184,255,.13),transparent 72%); mix-blend-mode: screen; transition: opacity .3s ease; }
+    .lab-panel { position: relative; min-width: 0; padding: clamp(20px, 3vw, 30px); border: 1px solid rgba(167,201,213,.17); border-radius: 6px; background: linear-gradient(145deg,rgba(17,32,40,.88),rgba(8,15,20,.96)); transition: border-color .35s ease, box-shadow .35s ease; }
     .lab-panel h3 { margin: 13px 0 9px; font-size: 23px; letter-spacing: -.04em; }
     .lab-panel > p { color: var(--muted); font-size: 12px; line-height: 1.8; }
     .lab-kicker { color: var(--blue); font: 9px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
@@ -436,7 +445,6 @@
     .learning-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
     .learning-note { --pointer-x: 50%; --pointer-y: 50%; position: relative; overflow: hidden; padding: 18px; border: 1px solid var(--line); background: #080d11; opacity: .7; transform: translateY(14px); transition: opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1), border-color .25s ease, background .25s ease, box-shadow .25s ease; }
     .learning-note::before { position: absolute; top: 0; left: 18px; width: 24px; height: 1px; content: ""; background: linear-gradient(90deg,var(--blue),var(--green)); opacity: .55; transition: width .3s ease, opacity .3s ease; }
-    .learning-note::after { position: absolute; top: -30%; bottom: -30%; left: -50%; width: 45%; content: ""; background: linear-gradient(90deg,transparent,rgba(71,184,255,.045),rgba(183,250,99,.13),transparent); pointer-events: none; }
     .learning-note h4 { margin: 10px 0 8px; font-size: 14px; }
     .learning-note p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.75; }
     .install-app { padding: 7px 10px; border: 1px solid rgba(71,184,255,.35); background: transparent; color: var(--blue); cursor: pointer; font: 9px var(--mono); letter-spacing: .08em; }
@@ -464,6 +472,11 @@
     .case-preview img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
     .case-preview img[hidden] { display: none; }
     .case-preview figcaption { margin-top: 7px; color: #a4b3b8; font: 10px var(--mono); line-height: 1.5; }
+    .case-demo { margin: 20px 0; padding: 16px; border: 1px solid var(--line); background: #05090d; }
+    .case-demo p { color: #b7c5c8; font-size: 12px; line-height: 1.7; }
+    .case-demo button { min-height: 44px; padding: 8px 12px; border: 1px solid rgba(71,184,255,.4); background: transparent; color: var(--green); cursor: pointer; font: 10px var(--mono); }
+    .case-demo iframe { display: block; width: 100%; height: min(60vh, 500px); margin-top: 14px; border: 1px solid var(--line); background: #fff; }
+    .case-demo[hidden] { display: none; }
 
     .command-palette { width: min(590px, calc(100% - 28px)); max-height: min(78svh, 650px); padding: 0; overflow: hidden; border: 1px solid rgba(71,184,255,.38); background: linear-gradient(145deg,#0c171e,#05090d 76%); color: var(--white); box-shadow: 0 30px 110px rgba(0,0,0,.72),0 0 55px rgba(71,184,255,.08); }
     .command-palette::backdrop { background: rgba(0,5,9,.78); backdrop-filter: blur(10px); }
@@ -577,24 +590,24 @@
     @media (hover: hover) and (pointer: fine) {
       .project-card:hover .project-visual::before { animation: project-scan 1.1s ease-out; }
       .lab-panel[data-reveal].visible:hover { border-color: rgba(71,184,255,.35); box-shadow: 0 16px 48px rgba(0,0,0,.24),0 0 30px rgba(71,184,255,.045); }
-      .lab-panel:hover::after { opacity: 1; }
-      .lab-panel:hover::before { animation: panel-sweep 1s ease-out; }
       [data-reveal].visible .stat:hover { transform: translateY(-3px); border-color: rgba(71,184,255,.35); background-color: rgba(71,184,255,.075); background-image: radial-gradient(240px circle at var(--pointer-x) var(--pointer-y),rgba(71,184,255,.16),transparent 72%),linear-gradient(145deg,rgba(71,184,255,.055),rgba(10,17,22,.5)); box-shadow: 0 10px 28px rgba(0,0,0,.2),0 0 22px rgba(71,184,255,.06); }
       .activity-list li:hover::before { background: var(--green); box-shadow: 0 0 12px rgba(183,250,99,.75); transform: translateY(-50%) scale(1.25); }
       .skill:hover { transform: translateY(-3px); border-color: rgba(183,250,99,.5); color: var(--green); box-shadow: 0 8px 24px rgba(71,184,255,.1); }
       .skill:hover::before { animation: skill-sweep .75s ease-out; }
-      [data-reveal].visible .journey-item:hover, [data-reveal].visible .learning-note:hover { transform: translateY(-4px); border-color: rgba(71,184,255,.35); background-color: rgba(71,184,255,.065); box-shadow: 0 12px 30px rgba(0,0,0,.2); }
+      [data-reveal].visible .journey-item:hover, [data-reveal].visible .learning-note:hover { border-color: rgba(71,184,255,.35); background-color: rgba(71,184,255,.065); box-shadow: 0 12px 30px rgba(0,0,0,.2); }
+      [data-reveal].visible .journey-item:hover { transform: translateY(-4px); }
       [data-reveal].visible .journey-item:hover::after { opacity: 1; }
       [data-reveal].visible .learning-note:hover { background-image: radial-gradient(260px circle at var(--pointer-x) var(--pointer-y),rgba(71,184,255,.13),transparent 72%); }
       [data-reveal].visible .learning-note:hover::before { width: calc(100% - 36px); opacity: 1; }
-      [data-reveal].visible .learning-note:hover::after { animation: note-scan .8s ease-out; }
     }
 
     [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
     [data-reveal].visible { opacity: 1; transform: translateY(0); }
+    .lab-panel[data-reveal], .lab-panel[data-reveal].visible { transform: none; transition: opacity .7s ease, border-color .35s ease, box-shadow .35s ease; }
     #work .project-card:nth-child(2) { transition-delay: .08s; }
     #work .project-card:nth-child(3) { transition-delay: .16s; }
     @keyframes pulse { 50% { opacity: .45; box-shadow: 0 0 3px var(--green); } }
+    @keyframes sector-arrive { from { opacity: .55; } to { opacity: 1; } }
     @keyframes signal-breathe { 50% { opacity: .45; transform: scale(.7); } }
     @keyframes refresh-spin { to { transform: rotate(360deg); } }
     @keyframes sun-corona { from { opacity: .72; transform: scale(.72); } to { opacity: 0; transform: scale(1.65); } }
@@ -605,7 +618,6 @@
     @keyframes journey-signal-vertical { to { background-position: 0 100%; } }
     @keyframes journey-node { 50% { border-color: var(--green); box-shadow: 0 0 15px rgba(71,184,255,.55),0 0 6px rgba(183,250,99,.48); } }
     @keyframes stat-charge { to { transform: scaleX(1); } }
-    @keyframes note-scan { to { transform: translateX(340%) skewX(-18deg); } }
     @keyframes skill-arrive { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
     @keyframes skill-sweep { to { transform: translateX(120%) skewX(-18deg); } }
     @keyframes activity-arrive { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
@@ -653,7 +665,6 @@
     @keyframes project-filter-arrive { from { opacity: 0; transform: translateY(18px) scale(.975); filter: brightness(1.3); } to { opacity: 1; transform: translateY(0) scale(1); filter: brightness(1); } }
     @keyframes contact-item-arrive { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes title-signal-sweep { from { background-position: 130% 0; filter: brightness(.7); } to { background-position: -30% 0; filter: brightness(1.35); } }
-    @keyframes panel-sweep { 100% { left: 120%; opacity: .8; } }
     @keyframes heading-signal { to { opacity: .55; transform: scaleX(.58); } }
     @keyframes section-heading-sweep { from { background-position: 100% 0; filter: brightness(.65); } to { background-position: 0 0; filter: brightness(1.5); } }
     @keyframes caret-blink { to { visibility: hidden; } }
@@ -903,6 +914,7 @@
       <div class="shell hero-content">
         <div class="hero-topline">CSE + AI / WEB + APP DEVELOPMENT</div>
         <p class="hero-welcome" id="hero-welcome">WELCOME TO THE PORTFOLIO</p>
+        <p class="hero-guide">START WITH <a href="#work">PROJECTS</a> / EXPLORE <a href="#about">THE JOURNEY</a> / TRY <a href="#labs">EXPERIMENTS</a></p>
         <h1>BUILDING<br><span class="outline">WHAT'S</span><br><span class="accent">NEXT.</span></h1>
         <div class="hero-bottom">
           <div class="hero-copy">
@@ -1069,7 +1081,16 @@
           <img id="case-preview-image" alt="Screenshot of the Kisaan Sathi home page" width="960" height="540" loading="lazy" decoding="async">
           <figcaption id="case-preview-caption">Kisaan Sathi website preview.</figcaption>
         </figure>
+        <div class="case-demo" id="case-demo" hidden>
+          <div class="lab-kicker">INTERACTIVE LIVE PROJECT</div>
+          <p>Load the real Kisaan Sathi website here to try it. This uses data from the external site; you can also open it in a new tab below.</p>
+          <button type="button" id="case-demo-toggle" aria-expanded="false" aria-controls="case-demo-preview">LOAD LIVE DEMO</button>
+          <div id="case-demo-preview" hidden></div>
+        </div>
         <dl class="case-facts">
+          <div><dt>Challenge</dt><dd id="case-challenge"></dd></div>
+          <div><dt>Approach</dt><dd id="case-approach"></dd></div>
+          <div><dt>What exists</dt><dd id="case-outcome"></dd></div>
           <div><dt>Highlights</dt><dd id="case-highlights"></dd></div>
           <div id="case-stack-row" hidden><dt>Repository languages</dt><dd id="case-stack"></dd></div>
           <div><dt>Focus</dt><dd id="case-focus"></dd></div>
@@ -1139,29 +1160,36 @@
             <div class="stat"><strong>AI</strong><span>Artificial intelligence</span></div>
             <div class="stat"><strong>CSE + AI</strong><span>My study focus</span></div>
           </div>
-          <div class="skill-list" aria-label="Skills">
-            <a class="skill" href="#project-mind-care">WEB DEVELOPMENT</a>
-            <a class="skill" href="#work">APPLICATION DEVELOPMENT</a>
-            <a class="skill" href="#project-kisaan">ARTIFICIAL INTELLIGENCE</a>
+          <div class="skill-list" role="group" aria-label="Explore skills and related projects">
+            <button class="skill" type="button" data-skill="web" aria-pressed="true">WEB DEVELOPMENT</button>
+            <button class="skill" type="button" data-skill="app" aria-pressed="false">APPLICATION DEVELOPMENT</button>
+            <button class="skill" type="button" data-skill="ai" aria-pressed="false">ARTIFICIAL INTELLIGENCE</button>
           </div>
-          <p class="skill-context">My focus is building responsive web apps and applying AI in useful products. <a href="https://github.com/DilshajAshrafi" target="_blank" rel="noreferrer">Explore my projects on GitHub ↗</a></p>
+          <p class="skill-context" id="skill-description">Responsive web experiences, from farmer support to wellbeing tools.</p>
+          <div class="skill-results" id="skill-results" aria-live="polite">
+            <a href="#project-kisaan">Kisaan Sathi ↗</a><a href="#project-mind-care">Mind Care ↗</a>
+          </div>
           <div class="journey" aria-labelledby="journey-title">
-            <h3 id="journey-title">Education &amp; milestones.</h3>
+            <h3 id="journey-title">Journey &amp; milestones.</h3>
+            <p class="skill-context">Explore the study and project milestones behind this portfolio.</p>
             <div class="journey-list">
               <article class="journey-item">
                 <span>CURRENT STUDY FOCUS</span>
                 <h4>CSE + AI</h4>
                 <p>Focused on web and application development and artificial intelligence.</p>
+                <details><summary>Explore this focus</summary>Building responsive interfaces and exploring practical uses for AI.</details>
               </article>
               <article class="journey-item">
                 <span>PROJECT / CO-CREATOR</span>
                 <h4>Kisaan Sathi</h4>
                 <p>Working on a farmer-focused web platform with AI-guided support.</p>
+                <details><summary>Explore this milestone</summary>Co-creating a web experience centered on farmer support.<br><a href="#project-kisaan">View project ↗</a></details>
               </article>
               <article class="journey-item">
                 <span>COLLABORATIVE PROJECT</span>
                 <h4>Mind Care</h4>
                 <p>Contributed to a student-made wellbeing web app with multilingual tools and optional AI chat.</p>
+                <details><summary>Explore this milestone</summary>Collaborating on a multilingual wellbeing toolkit.<br><a href="#project-mind-care">View project ↗</a></details>
               </article>
             </div>
           </div>
@@ -1827,6 +1855,7 @@
     const siteHeader = document.querySelector(".site-header");
     const chapterHud = document.querySelector("#chapter-hud");
     const returnOrbit = document.querySelector("#return-orbit");
+    const labsSection = document.querySelector("#labs");
     const chapterHudCount = document.querySelector("#chapter-hud-count");
     const chapterHudLabel = document.querySelector("#chapter-hud-label");
     const chapterHudProgress = [...document.querySelectorAll(".chapter-hud-progress i")];
@@ -1850,6 +1879,10 @@
 
     window.addEventListener("scroll", updateScrollChrome, { passive: true });
     updateScrollChrome();
+    const labsOverlayObserver = new IntersectionObserver((entries) => {
+      document.body.classList.toggle("viewing-experiments", entries[0].isIntersecting);
+    });
+    labsOverlayObserver.observe(labsSection);
 
     const navTargets = [...document.querySelectorAll(".nav-links a[href^='#']")]
       .map((link) => ({ link, section: document.querySelector(link.getAttribute("href")) }))
@@ -2021,7 +2054,7 @@
         heroGrid.style.removeProperty("--grid-y");
       });
 
-      document.querySelectorAll(".project-card, .lab-panel, .stat, .journey-item, .learning-note").forEach((card) => {
+      document.querySelectorAll(".project-card, .stat, .journey-item, .learning-note").forEach((card) => {
         card.addEventListener("pointermove", (event) => {
           if (performanceLite || motionLimited) return;
           const bounds = card.getBoundingClientRect();
@@ -2093,11 +2126,42 @@
         updateProjectFilter(true);
       });
     });
-    document.querySelectorAll('.skill-list .skill[href^="#project-"]').forEach((link) => {
-      link.addEventListener("click", () => {
+    const skillMaps = {
+      web: {
+        description: "Responsive web experiences, from farmer support to wellbeing tools.",
+        projects: [["kisaan", "Kisaan Sathi"], ["mind-care", "Mind Care"]]
+      },
+      app: {
+        description: "Web applications that bring useful tools together in one experience.",
+        projects: [["kisaan", "Kisaan Sathi"], ["mind-care", "Mind Care"]]
+      },
+      ai: {
+        description: "Exploring AI-powered products, autonomous assistance, and knowledge systems.",
+        projects: [["kisaan", "Kisaan Sathi"], ["ai", "Autonomous AI Engine"], ["mind-care", "Mind Care"]]
+      }
+    };
+    const skillButtons = [...document.querySelectorAll("[data-skill]")];
+    const skillDescription = document.querySelector("#skill-description");
+    const skillResults = document.querySelector("#skill-results");
+    skillButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const skill = skillMaps[button.dataset.skill];
+        skillButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        skillDescription.textContent = skill.description;
+        const links = skill.projects.map(([id, title]) => {
+          const link = document.createElement("a");
+          link.href = `#project-${id}`;
+          link.textContent = `${title} ↗`;
+          return link;
+        });
+        skillResults.replaceChildren(...links);
+      });
+    });
+    document.querySelector("#about").addEventListener("click", (event) => {
+      if (event.target.closest('.skill-results a[href^="#project-"], .journey-item a[href^="#project-"]')) {
         projectSearch.value = "";
         projectFilterButtons[0].click();
-      });
+      }
     });
 
     const promptBuilderForm = document.querySelector("#prompt-builder-form");
@@ -2304,6 +2368,9 @@
       kisaan: {
         title: "Kisaan Sathi",
         summary: "A farmer-support platform offering crop guidance, irrigation planning, soil and pest care, and scheme information.",
+        challenge: "Make agricultural information and useful technology more accessible to farmers.",
+        approach: "Bring crop, irrigation, soil, pest, and scheme information together in an AI-focused web experience.",
+        outcome: "A live farmer-support website is available to explore.",
         highlights: "Crop guidance, irrigation planning, soil and pest care, and scheme information.",
         stack: "HTML · CSS · JavaScript",
         focus: "AI-powered agricultural guidance through a farmer-focused web experience.",
@@ -2314,6 +2381,9 @@
       assistant: {
         title: "Autonomous AI Assistant & Knowledge Engine",
         summary: "A featured project focused on autonomous AI assistance and connected knowledge.",
+        challenge: "Explore how AI assistance and connected knowledge can support workflows.",
+        approach: "Exploring autonomous assistance and knowledge systems.",
+        outcome: "Featured in the portfolio; a public demo or dedicated repository was not listed.",
         highlights: "Autonomous assistance and connected knowledge systems.",
         focus: "Artificial intelligence, autonomous assistance, and knowledge systems.",
         contribution: "Listed as a featured project in the existing portfolio; a dedicated public repository was not listed."
@@ -2321,6 +2391,9 @@
       "mind-care": {
         title: "Mind Care",
         summary: "A student-made wellbeing toolkit with mood check-ins, a seven-day reflection, focus and break timer, daily care checklist, stress tools, sleep ideas, multilingual support, and optional AI chat.",
+        challenge: "Bring everyday wellbeing tools together in an accessible, multilingual web experience.",
+        approach: "A collaborative student project combining reflection, focus tools, and optional AI chat.",
+        outcome: "The project source is available on GitHub.",
         highlights: "Seven-day mood reflection, focus/break timer, daily care checklist, stress tools, sleep ideas, multilingual support, and optional AI chat.",
         stack: "JavaScript · CSS · HTML · Java",
         focus: "Wellbeing support tools and accessible, multilingual web experiences.",
@@ -2336,6 +2409,31 @@
     const casePreview = document.querySelector("#case-preview");
     const casePreviewImage = document.querySelector("#case-preview-image");
     const casePreviewCaption = document.querySelector("#case-preview-caption");
+    const caseDemo = document.querySelector("#case-demo");
+    const caseDemoToggle = document.querySelector("#case-demo-toggle");
+    const caseDemoPreview = document.querySelector("#case-demo-preview");
+    function unloadCaseDemo() {
+      caseDemoPreview.hidden = true;
+      caseDemoPreview.replaceChildren();
+      caseDemoToggle.setAttribute("aria-expanded", "false");
+      caseDemoToggle.textContent = "LOAD LIVE DEMO";
+    }
+    caseDemoToggle.addEventListener("click", () => {
+      if (!caseDemoPreview.hidden) {
+        unloadCaseDemo();
+        return;
+      }
+      const frame = document.createElement("iframe");
+      frame.title = "Kisaan Sathi live website";
+      frame.sandbox = "allow-scripts allow-forms allow-popups allow-same-origin";
+      frame.referrerPolicy = "strict-origin-when-cross-origin";
+      frame.src = projectCases.kisaan.url;
+      caseDemoPreview.replaceChildren(frame);
+      caseDemoPreview.hidden = false;
+      caseDemoToggle.setAttribute("aria-expanded", "true");
+      caseDemoToggle.textContent = "CLOSE LIVE DEMO";
+    });
+    caseDialog.addEventListener("close", unloadCaseDemo);
     casePreviewImage.addEventListener("error", () => {
       casePreviewImage.hidden = true;
       casePreviewCaption.textContent = "The project preview could not be loaded.";
@@ -2345,6 +2443,8 @@
       if (!Object.prototype.hasOwnProperty.call(projectCases, key)) return;
       const project = projectCases[key];
       currentCaseKey = key;
+      unloadCaseDemo();
+      caseDemo.hidden = key !== "kisaan";
       caseShareStatus.textContent = "";
       casePreview.hidden = key !== "kisaan";
       if (key === "kisaan") {
@@ -2354,6 +2454,9 @@
       }
       document.querySelector("#case-title").textContent = project.title;
       document.querySelector("#case-summary").textContent = project.summary;
+      document.querySelector("#case-challenge").textContent = project.challenge;
+      document.querySelector("#case-approach").textContent = project.approach;
+      document.querySelector("#case-outcome").textContent = project.outcome;
       document.querySelector("#case-highlights").textContent = project.highlights;
       const caseStackRow = document.querySelector("#case-stack-row");
       caseStackRow.hidden = !project.stack;
@@ -2371,6 +2474,12 @@
       button.addEventListener("click", () => openProjectCase(button.dataset.case));
     });
     caseDialog.querySelector(".case-dialog-close").addEventListener("click", () => caseDialog.close());
+    caseDialog.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        caseDialog.close();
+      }
+    });
     function openCaseFromHash() {
       if (entryScreen.open || !window.location.hash.startsWith("#case-")) return;
       openProjectCase(window.location.hash.slice(6));
@@ -2393,7 +2502,8 @@
     document.querySelector("#case-download").addEventListener("click", () => {
       const project = projectCases[currentCaseKey];
       const summary = [
-        project.title, "", project.summary, "", `Highlights: ${project.highlights}`,
+        project.title, "", project.summary, "", `Challenge: ${project.challenge}`,
+        `Approach: ${project.approach}`, `What exists: ${project.outcome}`, `Highlights: ${project.highlights}`,
         project.stack ? `Repository languages: ${project.stack}` : null,
         `Focus: ${project.focus}`, `Contribution: ${project.contribution}`,
         `Project status: ${project.status || "Not specified."}`,
