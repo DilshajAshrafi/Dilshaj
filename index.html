@@ -702,6 +702,16 @@
       .stat-row { gap: 8px; }
       .stat strong { font-size: 23px; }
     }
+    .hero.motion-paused *, .hero.motion-paused *::before, .hero.motion-paused *::after,
+    .project-card.motion-paused .project-visual *, .project-card.motion-paused .project-visual::before {
+      animation-play-state: paused !important;
+    }
+    .performance-lite body::before { display: none; }
+    .performance-lite .site-header.scrolled, .performance-lite .chapter-hud, .performance-lite .return-orbit,
+    .performance-lite .entry-screen::backdrop, .performance-lite .case-dialog::backdrop, .performance-lite .command-palette::backdrop { backdrop-filter: none; }
+    .performance-lite .hero-grid, .performance-lite .orbital-core,
+    .performance-lite .project-visual::before, .performance-lite .terminal-shell::after,
+    .performance-lite .contact::after { animation: none; }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
       [data-reveal] { opacity: 1; transform: none; }
@@ -1208,6 +1218,10 @@
     const canvas = document.querySelector("#starfield");
     const context = canvas.getContext("2d");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const performanceLite = window.matchMedia("(pointer: coarse)").matches
+      || (navigator.hardwareConcurrency > 0 && navigator.hardwareConcurrency <= 4)
+      || (navigator.deviceMemory > 0 && navigator.deviceMemory <= 4);
+    document.documentElement.classList.toggle("performance-lite", performanceLite);
     const cloudToggle = document.querySelector("#cloud-toggle");
     const cloudToggleLabel = cloudToggle.querySelector(".cloud-toggle-label");
     const orbitalCore = document.querySelector(".orbital-core");
@@ -1427,16 +1441,21 @@
     });
     let stars = [];
     let meteors = [];
-    let animationFrame;
+    let animationFrame = 0;
     let lastFrameTime = 0;
+    let canvasBounds = { width: 0, height: 0 };
+    let heroVisible = false;
 
     function resizeCanvas() {
       const bounds = canvas.getBoundingClientRect();
-      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      const ratio = performanceLite ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+      if (canvasBounds.width === bounds.width && canvasBounds.height === bounds.height
+          && canvas.width === Math.floor(bounds.width * ratio) && canvas.height === Math.floor(bounds.height * ratio)) return;
+      canvasBounds = { width: bounds.width, height: bounds.height };
       canvas.width = bounds.width * ratio;
       canvas.height = bounds.height * ratio;
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      stars = Array.from({ length: Math.floor(bounds.width / 5) }, () => ({
+      stars = Array.from({ length: Math.min(220, Math.floor(bounds.width / (performanceLite ? 8 : 6))) }, () => ({
         x: Math.random() * bounds.width,
         y: Math.random() * bounds.height,
         size: Math.random() * 1.3 + .2,
@@ -1444,12 +1463,12 @@
         speed: Math.random() * .018 + .005,
         tint: Math.random() > .83 ? "blue" : "white"
       }));
-      meteors = prefersReducedMotion ? [] : Array.from({ length: 3 }, () => ({
+      meteors = prefersReducedMotion ? [] : Array.from({ length: performanceLite ? 1 : 3 }, () => ({
         active: false,
         wait: 700 + Math.random() * 2400
       }));
       lastFrameTime = 0;
-      drawStars(0);
+      drawStars(0, 0);
     }
 
     function drawMeteor(meteor, bounds, delta) {
@@ -1494,10 +1513,8 @@
       }
     }
 
-    function drawStars(time) {
-      const bounds = canvas.getBoundingClientRect();
-      const delta = lastFrameTime ? Math.min(time - lastFrameTime, 50) : 16.67;
-      lastFrameTime = time;
+    function drawStars(time, delta) {
+      const bounds = canvasBounds;
       context.clearRect(0, 0, bounds.width, bounds.height);
       for (const star of stars) {
         const opacity = .25 + (Math.sin(time * star.speed + star.phase) + 1) * .32;
@@ -1507,14 +1524,43 @@
         context.fillRect(star.x, star.y, star.size, star.size);
       }
       for (const meteor of meteors) drawMeteor(meteor, bounds, delta);
-      if (!prefersReducedMotion) animationFrame = requestAnimationFrame(drawStars);
+    }
+
+    function animateStars(time) {
+      animationFrame = 0;
+      if (!heroVisible || document.hidden || prefersReducedMotion) return;
+      if (!lastFrameTime || time - lastFrameTime >= 1000 / 30 - 2) {
+        const delta = lastFrameTime ? Math.min(time - lastFrameTime, 100) : 0;
+        lastFrameTime = time;
+        drawStars(time, delta);
+      }
+      animationFrame = requestAnimationFrame(animateStars);
+    }
+
+    function updateStarfieldPlayback() {
+      if (heroVisible && !document.hidden && !prefersReducedMotion) {
+        if (!animationFrame) animationFrame = requestAnimationFrame(animateStars);
+      } else {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = 0;
+        lastFrameTime = 0;
+      }
     }
 
     resizeCanvas();
-    window.addEventListener("resize", () => {
-      cancelAnimationFrame(animationFrame);
-      resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+    document.addEventListener("visibilitychange", updateStarfieldPlayback);
+    const motionObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        entry.target.classList.toggle("motion-paused", !entry.isIntersecting);
+        if (entry.target === canvas.parentElement) {
+          heroVisible = entry.isIntersecting;
+          updateStarfieldPlayback();
+        }
+      }
     });
+    motionObserver.observe(canvas.parentElement);
+    document.querySelectorAll(".project-card").forEach((card) => motionObserver.observe(card));
 
     const scrollProgressBar = document.querySelector("#scroll-progress-bar");
     const siteHeader = document.querySelector(".site-header");
@@ -1663,7 +1709,7 @@
     updateCommandResults();
 
     const supportsPointerEffects = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (supportsPointerEffects && !prefersReducedMotion) {
+    if (supportsPointerEffects && !prefersReducedMotion && !performanceLite) {
       let ambientPointer = null;
       let ambientPointerFrame = 0;
       document.addEventListener("pointermove", (event) => {
