@@ -1,4 +1,4 @@
-const CACHE_NAME = "dilshaj-portfolio-shell-v7";
+const CACHE_NAME = "dilshaj-portfolio-shell-v8";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -48,6 +48,7 @@ self.addEventListener("fetch", (event) => {
   const request = event.request;
   const requestUrl = new URL(request.url);
   if (request.method !== "GET" || requestUrl.origin !== self.location.origin) return;
+  if (request.headers.has("range") || request.destination === "audio" || request.destination === "video") return;
 
   if (request.mode === "navigate") {
     event.respondWith(

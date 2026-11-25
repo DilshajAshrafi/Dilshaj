@@ -713,8 +713,8 @@
       .stat-row { gap: 8px; }
       .stat strong { font-size: 23px; }
     }
-    .hero.motion-paused *, .hero.motion-paused *::before, .hero.motion-paused *::after,
-    .project-card.motion-paused .project-visual *, .project-card.motion-paused .project-visual::before {
+    .motion-paused, .motion-paused::before, .motion-paused::after,
+    .motion-paused *, .motion-paused *::before, .motion-paused *::after {
       animation-play-state: paused !important;
     }
     .performance-lite body::before { display: none; }
@@ -1154,7 +1154,7 @@
             <div class="lab-kicker">PUBLIC PROFILE / LIVE FEED</div>
             <h3 id="github-activity-title">GitHub activity.</h3>
             <p>Recent public events from the GitHub profile. This feed depends on GitHub being reachable.</p>
-            <p class="activity-status" id="github-activity-status" role="status" aria-live="polite">Loading public activity…</p>
+            <p class="activity-status" id="github-activity-status" role="status" aria-live="polite">Public activity loads when this section is visible.</p>
             <ul class="activity-list" id="github-activity" aria-label="Recent public GitHub activity"></ul>
             <a class="activity-profile" href="https://github.com/DilshajAshrafi" target="_blank" rel="noreferrer">OPEN GITHUB PROFILE ↗</a>
           </article>
@@ -1229,7 +1229,9 @@
     const canvas = document.querySelector("#starfield");
     const context = canvas.getContext("2d");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const dataSaver = Boolean(navigator.connection && navigator.connection.saveData);
     const performanceLite = window.matchMedia("(pointer: coarse)").matches
+      || dataSaver
       || (navigator.hardwareConcurrency > 0 && navigator.hardwareConcurrency <= 4)
       || (navigator.deviceMemory > 0 && navigator.deviceMemory <= 4);
     document.documentElement.classList.toggle("performance-lite", performanceLite);
@@ -1375,7 +1377,9 @@
         }
       });
       updateMusicToggle();
-      if (savedMusicPreference === "sound") {
+      if (savedMusicPreference === "sound" && dataSaver) {
+        musicStatus.textContent = "Data saver is on. Press the music control to play.";
+      } else if (savedMusicPreference === "sound") {
         startBackgroundMusic(true);
       }
     }
@@ -1459,7 +1463,11 @@
 
     function resizeCanvas() {
       const bounds = canvas.getBoundingClientRect();
-      const ratio = performanceLite ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+      const maxPixels = performanceLite ? 750000 : 2000000;
+      const ratio = Math.min(
+        performanceLite ? 1 : Math.min(window.devicePixelRatio || 1, 1.5),
+        Math.sqrt(maxPixels / Math.max(1, bounds.width * bounds.height))
+      );
       if (canvasBounds.width === bounds.width && canvasBounds.height === bounds.height
           && canvas.width === Math.floor(bounds.width * ratio) && canvas.height === Math.floor(bounds.height * ratio)) return;
       canvasBounds = { width: bounds.width, height: bounds.height };
@@ -1540,7 +1548,7 @@
     function animateStars(time) {
       animationFrame = 0;
       if (!heroVisible || document.hidden || prefersReducedMotion) return;
-      if (!lastFrameTime || time - lastFrameTime >= 1000 / 30 - 2) {
+      if (!lastFrameTime || time - lastFrameTime >= 1000 / (performanceLite ? 20 : 30) - 2) {
         const delta = lastFrameTime ? Math.min(time - lastFrameTime, 100) : 0;
         lastFrameTime = time;
         drawStars(time, delta);
@@ -1571,7 +1579,8 @@
       }
     });
     motionObserver.observe(canvas.parentElement);
-    document.querySelectorAll(".project-card").forEach((card) => motionObserver.observe(card));
+    document.querySelectorAll(".project-card, .focus-marquee, #terminal, #about, #labs, #contact")
+      .forEach((element) => motionObserver.observe(element));
 
     const scrollProgressBar = document.querySelector("#scroll-progress-bar");
     const siteHeader = document.querySelector(".site-header");
@@ -1918,7 +1927,14 @@
       }
     }
 
-    loadGithubActivity();
+    const githubObserver = new IntersectionObserver((entries, observer) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        observer.disconnect();
+        githubActivityStatus.textContent = "Loading public activity...";
+        loadGithubActivity();
+      }
+    }, { rootMargin: "200px" });
+    githubObserver.observe(githubActivityStatus);
 
     const assistantForm = document.querySelector("#assistant-form");
     const assistantMessage = document.querySelector("#assistant-message");
