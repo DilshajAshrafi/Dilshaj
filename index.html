@@ -420,6 +420,21 @@
     .prompt-result { margin-top: 18px; padding: 16px; border: 1px solid rgba(71,184,255,.2); background: #05090d; }
     .prompt-result h4 { margin: 0 0 9px; color: var(--green); font: 9px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
     .prompt-result pre { margin: 0; color: #c1ccce; font: 11px/1.7 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+    .contrast-tool { display: grid; gap: 14px; margin-top: 20px; }
+    .contrast-colors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .contrast-color { display: grid; gap: 9px; min-width: 0; padding: 12px; border: 1px solid var(--line); background: rgba(5,9,13,.65); color: #b9c9cc; font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .contrast-color-picker { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; color: var(--white); font: 11px var(--mono); letter-spacing: 0; }
+    .contrast-color input { width: 48px; height: 48px; padding: 3px; border: 1px solid rgba(167,201,213,.3); border-radius: 3px; background: #080d11; cursor: pointer; }
+    .contrast-preview { display: grid; gap: 7px; min-height: 120px; padding: 18px; border: 1px solid rgba(167,201,213,.25); border-radius: 3px; }
+    .contrast-preview span { font-size: 12px; line-height: 1.5; }
+    .contrast-preview strong { font-size: 20px; line-height: 1.25; }
+    .contrast-preview .contrast-preview-label { font: 9px var(--mono); letter-spacing: .1em; }
+    .contrast-readout { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 16px; padding: 14px; border: 1px solid rgba(71,184,255,.2); background: rgba(5,9,13,.65); }
+    .contrast-ratio { display: grid; gap: 5px; color: #a7bbc0; font: 9px var(--mono); letter-spacing: .08em; }
+    .contrast-ratio strong { color: var(--white); font: 600 21px var(--sans); letter-spacing: -.04em; }
+    .contrast-readout p { margin: 0; color: #c1ccce; font-size: 11px; line-height: 1.6; }
+    .contrast-readout[data-grade="pass"] p { color: #c3f4a1; }
+    .contrast-readout[data-grade="large"] p, .contrast-readout[data-grade="fail"] p { color: #ffd59b; }
     .activity-list { display: grid; gap: 0; margin: 18px 0 0; padding: 0; list-style: none; }
     .activity-list li { position: relative; padding: 13px 0 13px 13px; border-top: 1px solid var(--line); }
     .activity-list li::before { position: absolute; top: 50%; left: 0; width: 4px; height: 4px; border-radius: 50%; content: ""; background: var(--blue); box-shadow: 0 0 8px rgba(71,184,255,.35); transform: translateY(-50%) scale(.8); transition: background .2s ease, box-shadow .2s ease, transform .2s ease; }
@@ -1262,10 +1277,24 @@
             <div class="lab-kicker">INTERACTIVE TOOL / RUNS LOCALLY</div>
             <h3 id="contrast-check-title">Check color contrast.</h3>
             <p>Choose two colors to check their contrast for readable text. Nothing is sent to a server.</p>
-            <div class="prompt-form">
-              <label for="contrast-foreground">Text color <input id="contrast-foreground" type="color" value="#eef7f7"></label>
-              <label for="contrast-background">Background color <input id="contrast-background" type="color" value="#05090d"></label>
-              <p id="contrast-result" role="status" aria-live="polite"></p>
+            <div class="contrast-tool">
+              <div class="contrast-colors">
+                <label class="contrast-color" for="contrast-foreground">Text color
+                  <span class="contrast-color-picker"><input id="contrast-foreground" type="color" value="#eef7f7"><span id="contrast-foreground-value">#EEF7F7</span></span>
+                </label>
+                <label class="contrast-color" for="contrast-background">Background color
+                  <span class="contrast-color-picker"><input id="contrast-background" type="color" value="#05090d"><span id="contrast-background-value">#05090D</span></span>
+                </label>
+              </div>
+              <div class="contrast-preview" id="contrast-preview" style="color:#eef7f7;background-color:#05090d">
+                <span class="contrast-preview-label">LIVE PREVIEW</span>
+                <strong>Readable design starts here.</strong>
+                <span>See how your text and background work together.</span>
+              </div>
+              <div class="contrast-readout" id="contrast-readout" role="status" aria-live="polite" aria-atomic="true">
+                <div class="contrast-ratio">RATIO / ROUNDED <strong id="contrast-ratio"></strong></div>
+                <p id="contrast-result"></p>
+              </div>
             </div>
           </article>
 
@@ -2188,6 +2217,11 @@
 
     const contrastForeground = document.querySelector("#contrast-foreground");
     const contrastBackground = document.querySelector("#contrast-background");
+    const contrastForegroundValue = document.querySelector("#contrast-foreground-value");
+    const contrastBackgroundValue = document.querySelector("#contrast-background-value");
+    const contrastPreview = document.querySelector("#contrast-preview");
+    const contrastReadout = document.querySelector("#contrast-readout");
+    const contrastRatio = document.querySelector("#contrast-ratio");
     const contrastResult = document.querySelector("#contrast-result");
     function colorLuminance(color) {
       const channels = [1, 3, 5].map((index) => {
@@ -2202,7 +2236,13 @@
       const ratio = (Math.max(first, second) + .05) / (Math.min(first, second) + .05);
       const result = ratio >= 4.5 ? "Passes WCAG AA for normal text."
         : ratio >= 3 ? "Passes WCAG AA for large text only." : "Does not pass WCAG AA for text.";
-      contrastResult.textContent = `${ratio.toFixed(2)}:1 · ${result}`;
+      contrastForegroundValue.textContent = contrastForeground.value.toUpperCase();
+      contrastBackgroundValue.textContent = contrastBackground.value.toUpperCase();
+      contrastPreview.style.color = contrastForeground.value;
+      contrastPreview.style.backgroundColor = contrastBackground.value;
+      contrastReadout.dataset.grade = ratio >= 4.5 ? "pass" : ratio >= 3 ? "large" : "fail";
+      contrastRatio.textContent = `${ratio.toFixed(2)}:1`;
+      contrastResult.textContent = result;
     }
     contrastForeground.addEventListener("input", updateContrastResult);
     contrastBackground.addEventListener("input", updateContrastResult);
