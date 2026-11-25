@@ -48,6 +48,7 @@ function createScene() {
     canvas, context: drawing, document, performanceLite: false, prefersReducedMotion: false,
     window: { devicePixelRatio: 1, PerformanceObserver, addEventListener() {} },
     PerformanceObserver, IntersectionObserver,
+    syncLocalClock() {},
     requestAnimationFrame: (callback) => { nextFrame = callback; return 1; },
     cancelAnimationFrame() {},
   });
