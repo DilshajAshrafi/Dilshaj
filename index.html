@@ -405,9 +405,9 @@
     .assistant-form button { justify-self: start; border: 0; cursor: pointer; }
     .assistant-form button:disabled { cursor: wait; opacity: .7; }
     .assistant-status { min-height: 18px; color: var(--muted); font-size: 10px; line-height: 1.6; }
+    .assistant-status:empty { display: none; }
     .assistant-result { margin-top: 14px; padding: 15px; border-left: 2px solid var(--green); background: rgba(183,250,99,.035); }
     .assistant-result p { margin: 0; color: #c1ccce; font-size: 12px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
-    .assistant-privacy { margin-top: 12px; color: var(--muted); font-size: 9px; line-height: 1.65; }
     .learning-journal { grid-column: 1 / -1; }
     .learning-journal h3 { margin-top: 0; }
     .learning-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
@@ -1119,8 +1119,7 @@
               </label>
               <button class="button" type="submit">ASK THE GUIDE <span class="button-arrow">↗</span></button>
             </form>
-            <p class="assistant-privacy">Replies require GEMINI_API_KEY in the host's private settings. Prompts are sent to Google Gemini; this portfolio does not keep chat history. Avoid sharing private details, and set provider usage limits before enabling this publicly.</p>
-            <p class="assistant-status" id="assistant-status" role="status" aria-live="polite">Live replies activate after the server is configured with GEMINI_API_KEY.</p>
+            <p class="assistant-status" id="assistant-status" role="status" aria-live="polite"></p>
             <div class="assistant-result" id="assistant-result" role="region" aria-label="Portfolio guide reply" aria-live="polite" hidden>
               <p id="assistant-reply"></p>
             </div>
